@@ -12,8 +12,8 @@ class SerialDevice:
             bytesize=serial.EIGHTBITS,
             timeout=1
         )
-        if self.device.is_open():
-            print('Pomyślnie otwarto port szeregowy');
+        if self.device.isOpen():
+            print('Pomyślnie otwarto port szeregowy')
 
     def send(self, command):
-        self.device.write(command)
+        self.device.write(str.encode(command))
