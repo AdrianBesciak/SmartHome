@@ -1,3 +1,4 @@
+import time
 import serial
 
 
@@ -14,6 +15,10 @@ class SerialDevice:
         )
         if self.device.isOpen():
             print('Pomyślnie otwarto port szeregowy')
+            time.sleep(2)
 
     def send(self, command):
-        self.device.write(str.encode(command))
+        self.device.write(str.encode(command + '\n'))
+
+    def read(self):
+        return self.device.read_until('\n').decode("utf-8")
