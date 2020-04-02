@@ -13,12 +13,20 @@ class SerialDevice:
             bytesize=serial.EIGHTBITS,
             timeout=1
         )
-        if self.device.isOpen():
-            print('Pomyślnie otwarto port szeregowy')
+        if not self.device.isOpen():
+            print('Nie udało się otworzyć portu szeregowego')
+        else:
             time.sleep(2)
+            self.getserviceslist()
 
     def send(self, command):
         self.device.write(str.encode(command + '\n'))
 
     def read(self):
         return self.device.read_until('\n').decode("utf-8")
+
+    def getserviceslist(self):
+        self.send('sendservices')
+        int amount = self.read()
+        for i in range(amount):
+            print(self.read())
