@@ -1,13 +1,11 @@
 import serialdevice
 
 
-def main():
+def main(com):
     dev = serialdevice.SerialDevice('ttyACM0')
-
-    dev.send('Pierwsza komenda')
-    print('Odebrano: ' + dev.read())
-    dev.send('Druga komenda')
-    print('Odebrano: ' + dev.read())
+    while True:
+        if com.poll(1):
+            com.send(dev.talk(com.recv()))
 
 
 if __name__ == "__main__":
