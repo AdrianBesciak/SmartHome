@@ -1,7 +1,7 @@
-import serialDevice
+import serialdevice
 
 
-dev = serialDevice.SerialDevice('ttyACM0')
+dev = serialdevice.SerialDevice('ttyACM0')
 
 dev.send('Pierwsza komenda')
 print('Odebrano: ' + dev.read())
