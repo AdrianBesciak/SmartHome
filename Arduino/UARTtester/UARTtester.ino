@@ -1,3 +1,5 @@
+String name;
+
 
 void setup()
 {
@@ -6,10 +8,18 @@ void setup()
   {
     ;
   }
+  name = "Urzadzenie 1";
 }
 
 void loop() // run over and over
 {
   if ( Serial.available() > 0 )
-    Serial.println(Serial.readStringUntil('\n'));
+  {
+    String rec = Serial.readStringUntil('\n');
+    if ( rec == "getname" )
+      Serial.println(name);
+    else
+      Serial.println(rec);
+  }
+    
 }
