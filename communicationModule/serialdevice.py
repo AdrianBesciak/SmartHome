@@ -17,7 +17,7 @@ class SerialDevice:
             print('Nie udało się otworzyć portu szeregowego')
         else:
             time.sleep(2)
-            self.getserviceslist()
+#            self.getserviceslist()
 
     def send(self, command):
         self.device.write(str.encode(command + '\n'))
@@ -27,6 +27,6 @@ class SerialDevice:
 
     def getserviceslist(self):
         self.send('sendservices')
-        int amount = self.read()
+        amount = self.read()
         for i in range(amount):
             print(self.read())
