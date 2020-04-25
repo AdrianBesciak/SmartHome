@@ -2,15 +2,16 @@ from abc import ABC, abstractmethod
 
 
 class Device(ABC):
+    @abstractmethod
     def __init__(self, name):
         self.name = name
         self.services = self.getserviceslist()
 
-#    @abstractmethod
+    @abstractmethod
     def send(self, command):
         raise NotImplementedError("Implement send subclass!")
 
-#    @abstractmethod
+    @abstractmethod
     def read(self):
         raise NotImplementedError("Implement send subclass!")
 
