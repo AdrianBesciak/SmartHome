@@ -38,6 +38,10 @@ void loop(void) {
       digitalWrite(LEDPin, LOW);
       Serial.println("LEDTurnedOff");
     }
+    else if (rec == "sendservices")
+    {
+      Serial.println("getTemperature;turnOnLED;turnOffLED");
+    }
     else
       Serial.println(rec);
   }

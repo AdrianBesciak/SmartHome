@@ -84,47 +84,51 @@ void loop() {
       led.show();
       Serial.println("Alarm stopped");
     }
-    else if ( rec == "green" )
+    else if ( rec == "LEDgreen" )
     {
       for (int i = 0; i < 8; i++)
         led.setPixelColor(i, GREENCOLOR);
       led.show();
       Serial.println("Showed green color");
     }
-    else if ( rec == "red" )
+    else if ( rec == "LEDred" )
     {
       for (int i = 0; i < 8; i++)
         led.setPixelColor(i, REDCOLOR);
       led.show();
       Serial.println("Showed red color");
     }
-    else if ( rec == "blue" )
+    else if ( rec == "LEDblue" )
     {
       for (int i = 0; i < 8; i++)
         led.setPixelColor(i, BLUECOLOR);
       led.show();
       Serial.println("Showed blue color");
     }
-    else if ( rec == "yellow" )
+    else if ( rec == "LEDyellow" )
     {
       for (int i = 0; i < 8; i++)
         led.setPixelColor(i, YELLOWCOLOR);
       led.show();
       Serial.println("Showed yellow color");
     }
-    else if ( rec == "black" || rec == "turnOffLED" )
+    else if ( rec == "LEDblack" || rec == "turnOffLED" )
     {
       for (int i = 0; i < 8; i++)
         led.setPixelColor(i, BLACKCOLOR);
       led.show();
       Serial.println("Turned off LEDs");
     }
-    else if ( rec == "white" || rec == "turnOnLED" )
+    else if ( rec == "LEDwhite" || rec == "turnOnLED" )
     {
       for (int i = 0; i < 8; i++)
         led.setPixelColor(i, WHITECOLOR);
       led.show();
       Serial.println("Turned on LEDs");
+    }
+    else if ( rec == "sendservices" )
+    {
+      Serial.println("startAlarm;soundSignal;doubleSoundSignal;stopAlarm;LEDgreen;LEDred;LEDblue;LEDyellow;LEDblack;LEDwhite");
     }
     else
       Serial.println(rec);
