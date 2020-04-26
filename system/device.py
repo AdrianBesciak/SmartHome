@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from logger import Logger
 
 
 class Device(ABC):
@@ -6,6 +7,8 @@ class Device(ABC):
     def __init__(self, name):
         self.name = name
         self.services = self.getserviceslist()
+        self.__logger = Logger()
+        self.__logger.addlog(self, 'device registration', 'Registered device: ' + self.name)
 
     @abstractmethod
     def send(self, command):
@@ -20,7 +23,9 @@ class Device(ABC):
 
     def talk(self, command):
         self.send(command)
-        return self.read()
+        result = self.read()
+        self.__logger.addlog(self, command, result)
+        return result
 
     def getserviceslist(self):
         self.send('sendservices')
