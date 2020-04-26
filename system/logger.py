@@ -4,9 +4,9 @@ import datetime
 
 class Logger:
     def __init__(self):
-        __client = MongoClient()
-        __db = __client.SmartHomeServer
-        __logs = __db.logs
+        self.__client = MongoClient()
+        self.__db = self.__client.SmartHomeServer
+        self.__logs = self.__db.logs
 
     def addlog(self, device, service, message):
         log = { "device": device.getname(),
