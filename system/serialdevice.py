@@ -1,8 +1,9 @@
 import time
 import serial
+import device
 
 
-class SerialDevice:
+class SerialDevice(device.Device):
     def __init__(self, name):
         self.name = name
         self.device = serial.Serial(
@@ -17,20 +18,10 @@ class SerialDevice:
             print('Nie udalo sie otworzyc portu szeregowego')
         else:
             time.sleep(2)
-#            self.getserviceslist()
+        self.services = self.getserviceslist()
 
     def send(self, command):
         self.device.write(str.encode(command.__str__() + "\n"))
 
     def read(self):
         return self.device.read_until('\n').decode("utf-8")
-
-    def talk(self, command):
-        self.send(command)
-        return self.read()
-
-    def getserviceslist(self):
-        self.send('sendservices')
-        amount = self.read()
-        for i in range(amount):
-            print(self.read())
