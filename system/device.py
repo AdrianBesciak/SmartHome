@@ -15,6 +15,9 @@ class Device(ABC):
     def read(self):
         raise NotImplementedError("Implement send subclass!")
 
+    def getname(self):
+        return self.name
+
     def talk(self, command):
         self.send(command)
         return self.read()
