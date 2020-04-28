@@ -9,6 +9,6 @@ class Logger:
     def addlog(self, device, service, message):
         log = { "device": device.getname(),
                 "service": service,
-                "date": datetime.datetime.utcnow(),
+                "date": datetime.datetime.now(),
                 "message": message}
         self.__logs.send(log)
