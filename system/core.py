@@ -1,5 +1,6 @@
 import multiprocessing as mp
 import communicationModule as cm
+import loginService as ls
 
 
 def main():
@@ -9,22 +10,39 @@ def main():
     p = mp.Process(target=cm.main, args=(c_conn,))
     p.start()
     p_conn.send({'command': 'register_device', 'dev_type': 'serial', 'dev_port': dev_port})
-    dev_name = p_conn.recv();
+    dev_name = p_conn.recv()
+    login = ls.LoginService()
+    login.welcome()
 
     while True:
         s = input()
         if s == "close":
             print("Wychodze")
             break
+        if s == "login":
+            s = input("Username? ")
+            login.login(s)
+        if s == "logout"
+            login.logout()
+        if 
         if s == 'services':
-            p_conn.send({'command': 'services', 'dev_name': dev_name})
+            if login.check_privilege("list"):
+                p_conn.send({'command': 'services', 'dev_name': dev_name})
+            else:
+                print("You do not have access to this. Ask your admin.")
         elif s == 'devices_list':
-            p_conn.send({'command': 'devs'})
-            devices = p_conn.recv()
-            for i in devices:
-                print(i)
+            if login.check_privilege("list"):
+                p_conn.send({'command': 'devs'})
+                devices = p_conn.recv()
+                for i in devices:
+                    print(i)
+            else:
+                print("You do not have access to this. Ask your admin.")
         else:
-            p_conn.send({'command': 'send2dev', 'dev_name': dev_name, 'message': s})
+            if login.check_privilege("send")
+                p_conn.send({'command': 'send2dev', 'dev_name': dev_name, 'message': s})
+            else:
+                print("You do not have access to this. Ask your admin.")
         if p_conn.poll(10):
             print(p_conn.recv())
         else:
