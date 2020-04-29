@@ -10,7 +10,8 @@ def main(pipe):
                 if rec['dev_type'] == 'serial':
                     dev = serialdevice.SerialDevice(rec['dev_port'])
                     devices_dict[dev.getname()] = dev
-                    pipe.send('Registered device: ' + dev.getname())
+                    pipe.send(dev.getname())
+                    print('Registered device: ' + dev.getname())
             elif rec['command'] == 'send2dev':
                 pipe.send(devices_dict[rec['dev_name']].talk(rec['message']))
             elif rec['command'] == 'services':
