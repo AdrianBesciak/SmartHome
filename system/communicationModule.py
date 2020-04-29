@@ -6,14 +6,10 @@ def main(pipe):
     while True:
         if pipe.poll(1):
             rec = pipe.recv()
-            for i in rec:
-                print('\tkey: ' + i + ' value: ' + rec[i])
-            for i in devices_dict:
-                print('\t\t' + i)
             if rec['command'] == 'register_device':
-                print('Register dev' + rec['dev_name'])
                 if rec['dev_type'] == 'serial':
                     devices_dict[rec['dev_name']] = serialdevice.SerialDevice(rec['dev_name'])
+                print('Registered device: ' + rec['dev_name'])
             elif rec['command'] == 'send2dev':
                 pipe.send(devices_dict[rec['dev_name']].talk(rec['message']))
             elif rec['command'] == 'services':
