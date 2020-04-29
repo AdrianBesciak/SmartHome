@@ -17,6 +17,11 @@ def main():
             break
         if s == 'services':
             p_conn.send({'command': 'services', 'dev_name': dev_name})
+        elif s == 'devices_list':
+            p_conn.send({'command': 'devs'})
+            devices = p_conn.recv()
+            for i in devices:
+                print(i)
         else:
             p_conn.send({'command': 'send2dev', 'dev_name': dev_name, 'message': s})
         if p_conn.poll(10):

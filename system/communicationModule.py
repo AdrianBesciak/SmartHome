@@ -15,7 +15,10 @@ def main(pipe):
             elif rec['command'] == 'services':
                 pipe.send(devices_dict[rec['dev_name']].getserviceslist())
             elif rec['command'] == 'devs':
-                pipe.send(devices_dict)
+                devices_names = []
+                for dev in devices_dict:
+                    devices_names.append(dev)
+                pipe.send(devices_names)
             else:
                 pipe.send('Unrecognized command')
 
