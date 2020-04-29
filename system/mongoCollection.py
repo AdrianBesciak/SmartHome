@@ -9,3 +9,6 @@ class MongoCollection:
 
     def send(self, message):
         self.__collection.insert_one(message)
+
+    def get(self, field, value):
+        return self.__collection.find_one({field: value})
