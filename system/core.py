@@ -6,6 +6,8 @@ def main():
     p_conn, c_conn = mp.Pipe()
     p = mp.Process(target=cm.main, args=(c_conn,))
     p.start()
+    p_conn.send('register_device:serial:ttyUSB1')
+    '''    
     print("SelfCheck!")
     print("Getting the name of the Arduino module!")
     p_conn.send("getname")
@@ -21,18 +23,20 @@ def main():
     print("Check out the echo!")
     print("Write your word, and then the number of repetitions.")
     print("Write \"close\" to exit.")
+    '''
     while True:
-        t = input()
-        s = t.split()
-        if s[0] == "close":
+        s = input()
+        if s == "close":
             print("Wychodze")
             break
-        for i in range(int(s[1])):
-            p_conn.send(s[0])
-            if p_conn.poll(10):
-                print(p_conn.recv())
-            else:
-                print("timed out")
+        if s == 'services':
+            p_conn.send(s + ':ttyUSB1')
+        else:
+            p_conn.send('send2dev:ttyUSB1:' + s)
+        if p_conn.poll(10):
+            print(p_conn.recv())
+        else:
+            print("timed out")
 
     p.kill()
     exit()
