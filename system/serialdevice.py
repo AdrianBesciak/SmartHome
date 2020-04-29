@@ -5,9 +5,9 @@ from logger import Logger
 
 
 class SerialDevice(device.Device):
-    def __init__(self, name):
+    def __init__(self, port_name):
         self.device = serial.Serial(
-            port='/dev/' + name,
+            port='/dev/' + port_name,
             baudrate=9600,
             parity=serial.PARITY_NONE,
             stopbits=serial.STOPBITS_ONE,
@@ -19,7 +19,8 @@ class SerialDevice(device.Device):
         else:
             time.sleep(2)
         self.services = self.get_services_list()
-        device.Device.__init__(self, name)
+        self.send('getName')
+        device.Device.__init__(self, self.read())
 
     def send(self, command):
         self.device.write(str.encode(command.__str__() + "\n"))
