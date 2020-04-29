@@ -3,6 +3,7 @@ import serial
 import device
 from logger import Logger
 
+
 class SerialDevice(device.Device):
     def __init__(self, name):
         self.device = serial.Serial(
@@ -17,7 +18,7 @@ class SerialDevice(device.Device):
             print('Nie udalo sie otworzyc portu szeregowego')
         else:
             time.sleep(2)
-        self.services = self.getserviceslist()
+        self.services = self.get_services_list()
         device.Device.__init__(self, name)
 
     def send(self, command):

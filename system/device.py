@@ -6,7 +6,7 @@ class Device(ABC):
     @abstractmethod
     def __init__(self, name):
         self.name = name
-        self.services = self.getserviceslist()
+        self.services = self.get_services_list()
         self.__logger = Logger()
         self.__logger.addlog(self, 'device registration', 'Registered device: ' + self.name)
 
@@ -18,7 +18,7 @@ class Device(ABC):
     def read(self):
         raise NotImplementedError("Implement send subclass!")
 
-    def getname(self):
+    def get_name(self):
         return self.name
 
     def talk(self, command):
@@ -27,7 +27,7 @@ class Device(ABC):
         self.__logger.addlog(self, command, result)
         return result
 
-    def getserviceslist(self):
+    def get_services_list(self):
         self.send('sendservices')
         services = self.read()
         return services.split(';')

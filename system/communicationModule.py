@@ -12,22 +12,22 @@ def main(pipe):
             if rec['command'] == 'register_device':
                 if rec['dev_type'] == 'serial':
                     dev = serialdevice.SerialDevice(rec['dev_port'])
-                    devices_dict[dev.getname()] = dev
-                    pipe.send(dev.getname())
-                    print('Registered device: ' + dev.getname())
-                    if devices_db.get('dev_name', dev.getname()):
-                        print("Device: " + dev.getname() + " already exists in db.")
+                    devices_dict[dev.get_name()] = dev
+                    pipe.send(dev.get_name())
+                    print('Registered device: ' + dev.get_name())
+                    if devices_db.get('dev_name', dev.get_name()):
+                        print("Device: " + dev.get_name() + " already exists in db.")
                     else:
-                        post = {'dev_name': dev.getname(),
+                        post = {'dev_name': dev.get_name(),
                                 'dev_type': rec['dev_type'],
-                                'services': dev.getserviceslist(),
+                                'services': dev.get_services_list(),
                                 'registration_date': datetime.datetime.now()}
                         devices_db.send(post)
 
             elif rec['command'] == 'send2dev':
                 pipe.send(devices_dict[rec['dev_name']].talk(rec['message']))
             elif rec['command'] == 'services':
-                pipe.send(devices_dict[rec['dev_name']].getserviceslist())
+                pipe.send(devices_dict[rec['dev_name']].get_services_list())
             elif rec['command'] == 'devs':
                 devices_names = []
                 for dev in devices_dict:

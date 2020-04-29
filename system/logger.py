@@ -7,7 +7,7 @@ class Logger:
         self.__logs = mongoCollection.MongoCollection("logs")
 
     def addlog(self, device, service, message):
-        log = { "device": device.getname(),
+        log = { "device": device.get_name(),
                 "service": service,
                 "date": datetime.datetime.now(),
                 "message": message}
