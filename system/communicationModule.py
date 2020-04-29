@@ -1,9 +1,10 @@
 import serialdevice
+import datetime
 import mongoCollection as mongo
 
 
 def main(pipe):
-    devices_db = mongo.MongoCollection('Devices')
+    devices_db = mongo.MongoCollection('devices')
     devices_dict = {}
     while True:
         if pipe.poll(1):
@@ -19,7 +20,8 @@ def main(pipe):
                     else:
                         post = {'dev_name': dev.getname(),
                                 'dev_type': rec['dev_type'],
-                                'services': dev.getserviceslist()}
+                                'services': dev.getserviceslist(),
+                                'registration_date': datetime.datetime.now()}
                         devices_db.send(post)
 
             elif rec['command'] == 'send2dev':
