@@ -18,7 +18,7 @@ def main():
         if s == 'services':
             p_conn.send({'command': 'services', 'dev_name': dev_name})
         else:
-            p_conn.send({'command': 'send2dev', 'devName': dev_name, 'message': s})
+            p_conn.send({'command': 'send2dev', 'dev_name': dev_name, 'message': s})
         if p_conn.poll(10):
             print(p_conn.recv())
         else:
