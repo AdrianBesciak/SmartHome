@@ -3,12 +3,13 @@ import communicationModule as cm
 
 
 def main():
-    print("Type name of the device in /dev/ dictionary")
-    dev_name = input()
+    print("Type port of the device in /dev/ dictionary")
+    dev_port = input()
     p_conn, c_conn = mp.Pipe()
     p = mp.Process(target=cm.main, args=(c_conn,))
     p.start()
-    p_conn.send({'command': 'register_device', 'dev_type': 'serial', 'dev_name': dev_name})
+    p_conn.send({'command': 'register_device', 'dev_type': 'serial', 'dev_port': dev_port})
+    dev_name = p_conn.recv();
 
     while True:
         s = input()
