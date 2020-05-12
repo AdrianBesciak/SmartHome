@@ -18,3 +18,8 @@ body {
   background-color: #008CBA;
   color: white;
 }
+
+.submit:hover {
+  background-color: #008CBA;
+  color: white;
+}
