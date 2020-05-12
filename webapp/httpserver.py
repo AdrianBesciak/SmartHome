@@ -16,7 +16,12 @@ def login():
 
 @app.route('/login/<name>')
 def logged_in(name):
-    return render_template('login.html', name=name)
+    return render_template('loggedIn.html', name=name)
+
+
+@app.route('/register')
+def register():
+    return render_template('register.html')
 
 
 if __name__ == '__main__':
