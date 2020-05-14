@@ -1,9 +1,11 @@
 import mongoCollection
+from multiprocessing import Pipe
 
 
 class ScheduleService:
-    def __init__(self):
+    def __init__(self, pipe):
         self.__task_base = mongoCollection.MongoCollection("tasks")
+        self.__pipe = pipe
         # structure of a job:
         # name, device, command,
         # modifier(at/every), number, minutes/seconds/days/weeks/months
@@ -33,6 +35,26 @@ class ScheduleService:
         mod = input("Should it be executed at a given time or periodically?")
         unit = input("What time unit are we using?")
         num = input("And how many " + unit + "s?")
+
+        self.__pipe.send({'command': 'devs'})
+        devices = self.__pipe.recv()
+        if dev not in devices:
+            print("This device doesn't exist!")
+            return
+
+        self.__pipe.send({'command': 'services', 'dev_name': dev})
+        services = self.__pipe.recv()
+        if com not in services:
+            print("This device does not have given service!")
+            return
+
+        if mod not in ['at', 'every']:
+            print("Please use at or every for this")
+            return
+
+        if unit not in ['year', 'month', 'day', 'hour', 'minute']:
+            print("Please use a valid unit! Valid units include year, month, day, hour, minute.")
+            return
 
         job = {
             "name": name,

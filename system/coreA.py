@@ -14,7 +14,7 @@ def main():
     dev_name = p_conn.recv()
     login = ls.LoginService()
     login.welcome()
-    scheduler = ss.ScheduleService()
+    scheduler = ss.ScheduleService(p_conn)
 
     while True:
         s = input()
