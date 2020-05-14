@@ -1,14 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>SmartHome-{{ name }}</title>
-        <link rel="stylesheet" href='/static/style.css' />
-    </head>
-    <body>
-        <h2>Successfully logged</h2>
-        <br>
-        <br>
-        Hello {{ name }}!
-    </body>
-</html>
+{% extends "layout.html" %}
+{% block content %}
+    <h2>Successfully logged</h2>
+    <br>
+    <br>
+    Hello {{ name }}!
+{% endblock content %}

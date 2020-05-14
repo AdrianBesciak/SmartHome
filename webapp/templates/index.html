@@ -1,12 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>SmartHome</title>
-        <link rel="stylesheet" href='/static/style.css' />
-    </head>
-    <body>
-        <h1>SmartHome</h1>
-        <a href="/login" class="button"> LogIn </a>
-    </body>
-</html>
+{% extends "layout.html" %}
+{% block content %}
+    <h1>SmartHome</h1>
+    <a href="/login" class="button"> LogIn </a>
+{% endblock content %}
