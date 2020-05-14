@@ -84,6 +84,7 @@ class LoginService:
         add - adding new peripheral devices
         list - listing available services
         send - sending commands to peripherals
+        dev_<devname> access to specific device
         """
         if self.__user is None:
             print("You can't grant privileges to others without logging in!")
@@ -94,6 +95,7 @@ class LoginService:
                 print("There is no such user!")
                 return False
             user_to_grant["privileges"].append(privilege)
+            self.__user_base.remove("username", username)
             self.__user_base.send(user_to_grant)
             return True
         else:
@@ -111,6 +113,7 @@ class LoginService:
                 return False
             if privilege in user_under_question["privileges"]:
                 user_under_question["privileges"].remove(privilege)
+                self.__user_base.remove("username", username)
                 self.__user_base.send(user_under_question)
                 return True
             else:

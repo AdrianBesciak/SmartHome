@@ -1,6 +1,7 @@
 import multiprocessing as mp
 import communicationModule as cm
 import loginService as ls
+import scheduleService as ss
 
 
 def main():
@@ -13,6 +14,7 @@ def main():
     dev_name = p_conn.recv()
     login = ls.LoginService()
     login.welcome()
+    scheduler = ss.ScheduleService()
 
     while True:
         s = input()
@@ -45,10 +47,13 @@ def main():
                 dev = input("Which device?")
                 p_conn.send({'command': 'devs'})
                 devices = p_conn.recv()
-                if dev in devices and login.check_privilege("dev_"+dev):
-                    p_conn.send({'command': 'services', 'dev_name': dev})
+                if dev+'\r\n' in devices:
+                    if login.check_privilege("dev_"+dev):
+                        p_conn.send({'command': 'services', 'dev_name': dev})
+                    else:
+                        print("You do not have permission to touch this")
                 else:
-                    print("The device does not exist or you do not have permission to touch it")
+                    print("The device does not exist.")
                     print("Use <devices_list> to get the list of devices.")
             else:
                 print("You do not have access to this. Ask your admin.")
@@ -66,9 +71,9 @@ def main():
                 com = input("Service? ")
                 p_conn.send({'command': 'devs'})
                 devices = p_conn.recv()
-                if dev in devices:
+                if dev+'\r\n' in devices:
                     if login.check_privilege("dev_" + dev):
-                        p_conn.send({'command': 'send2dev', 'dev_name': dev, 'message': com})
+                        p_conn.send({'command': 'send2dev', 'dev_name': dev+'\r\n', 'message': com})
                     else:
                         print("You do not have access to this device!")
                 else:
@@ -77,6 +82,8 @@ def main():
                     print("Use <services <device>> for the list of available services")
             else:
                 print("You do not have access to this. Ask your admin.")
+        elif s == "scheduler":
+            scheduler.welcome()
         else:
             print("Available commands: close, login, logout, devices_list, services, send")
             print("Admin commands: grant, revoke")
