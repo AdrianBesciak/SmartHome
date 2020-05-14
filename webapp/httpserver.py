@@ -19,7 +19,7 @@ def log_user_in(username):
 
 @app.route('/')
 @app.route('/home')
-def index():
+def home():
     return render_template('index.html')
 
 
@@ -28,13 +28,19 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         flash(f'Account created for {form.username.data}!', 'success')
-        return redirect(url_for('index'))
+        return redirect(url_for('home'))
     return render_template('register.html', title='Register', form=form)
 
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
+    if form.validate_on_submit():
+        if form.email.data == 'asd@asd.com' and form.password.data == 'asd':
+            flash('You have been logged in!', 'success')
+            return redirect(url_for('home'))
+        else:
+            flash('Login unsuccesfull. Please check username and password', 'danger')
     return render_template('login.html', title='Login', form=form)
 
 
