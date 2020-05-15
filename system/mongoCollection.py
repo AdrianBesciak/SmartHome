@@ -12,3 +12,9 @@ class MongoCollection:
 
     def get(self, field, value):
         return self.__collection.find_one({field: value})
+
+    def remove(self, field, value):
+        return self.__collection.delete_one({field: value})
+
+    def getAll(self):
+        return self.__collection.find({})

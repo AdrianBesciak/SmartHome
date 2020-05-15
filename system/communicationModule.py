@@ -1,11 +1,16 @@
 from system import serialdevice
 import datetime
+
 from system import mongoCollection as mongo
+from system import scheduleChecker
+
 
 
 def main(pipe):
     devices_db = mongo.MongoCollection('devices')
     devices_dict = {}
+    schedule = scheduleChecker.ScheduleChecker()
+    lastMinute = datetime.datetime.now().minute
     while True:
         if pipe.poll(1):
             rec = pipe.recv()
@@ -36,6 +41,11 @@ def main(pipe):
             else:
                 pipe.send('Unrecognized command')
 
+        if datetime.datetime.now().minute != lastMinute:
+            jobs = schedule.checkJobs()
+            for job in jobs:
+                devices_dict[job['dev']].talk(job['message'])
+            lastMinute = datetime.datetime.now().minute
 
 if __name__ == "__main__":
     main()
