@@ -46,7 +46,12 @@ def register():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        if form.email.data == 'asd@asd.com' and form.password.data == 'asd':
+        system_core_pipe.send({'command': 'login',
+                               'email': form.email.data,
+                               'password': form.password.data
+                               })
+        received = system_core_pipe.recv()
+        if received['command'] == 'registered' and received['status'] == 'success':
             flash('You have been logged in!', 'success')
             return redirect(url_for('home'))
         else:
