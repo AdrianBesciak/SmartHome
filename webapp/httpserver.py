@@ -3,6 +3,7 @@ from webapp.forms import RegistrationForm, LoginForm
 
 app = Flask(__name__)
 
+system_core_pipe = None
 
 app.config['SECRET_KEY'] = 'afaa73978854986497574dcae8357ba7'
 
@@ -27,8 +28,17 @@ def home():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        flash(f'Account created for {form.username.data}!', 'success')
-        return redirect(url_for('home'))
+        system_core_pipe.send({'command': 'register',
+                               'username': form.username.data,
+                               'email': form.email.data,
+                               'password': form.password.data
+                               })
+        received = system_core_pipe.recv()
+        if received['command'] == 'registered' and received['status'] == 'success':
+            flash(f'Account created for {form.username.data}!', 'success')
+            return redirect(url_for('login'))
+        else:
+            flash(f'Account not created - system failure', 'danger')
     return render_template('register.html', title='Register', form=form)
 
 
@@ -45,6 +55,8 @@ def login():
 
 
 def main(pipe):
+    global system_core_pipe
+    system_core_pipe = pipe
     pipe.send('Proces zyje')
     app.run(debug=True, host='0.0.0.0')
     pipe.send('Strona dziala')
@@ -54,4 +66,4 @@ def main(pipe):
 
 
 if __name__ == '__main__':
-    main()
+    main(None)
