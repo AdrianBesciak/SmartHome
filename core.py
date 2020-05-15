@@ -1,5 +1,5 @@
 import multiprocessing as mp
-import communicationModule as cm
+from system import communicationModule as cm
 
 
 def main():

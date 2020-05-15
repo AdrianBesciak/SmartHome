@@ -1,5 +1,5 @@
 import datetime
-import mongoCollection
+from system import mongoCollection
 
 
 class Logger:

@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from logger import Logger
+from system.logger import Logger
 
 
 class Device(ABC):
