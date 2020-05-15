@@ -1,5 +1,6 @@
 import multiprocessing as mp
 from system import communicationModule as cm
+from webapp import httpserver
 
 
 def main():
@@ -9,7 +10,11 @@ def main():
     p = mp.Process(target=cm.main, args=(c_conn,))
     p.start()
     p_conn.send({'command': 'register_device', 'dev_type': 'serial', 'dev_port': dev_port})
-    dev_name = p_conn.recv();
+    dev_name = p_conn.recv()
+
+    web_p_conn, web_c_conn = mp.Pipe()
+    web_p = mp.Process(target=httpserver.main, args=(web_c_conn, ))
+    web_p.start()
 
     while True:
         s = input()
