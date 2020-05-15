@@ -13,6 +13,13 @@ def main():
     login.welcome()
     scheduler = ss.ScheduleService(p_conn)
 
+    print('Tworze serwer webowy')
+    web_p_conn, web_c_conn = mp.Pipe()
+    web_p = mp.Process(target=httpserver.main, args=(web_c_conn, ))
+    web_p.start()
+    print(web_p_conn.recv())
+    print(web_p_conn.recv())
+
     while True:
         s = input()
         if s == "close":

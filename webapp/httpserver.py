@@ -44,5 +44,14 @@ def login():
     return render_template('login.html', title='Login', form=form)
 
 
-if __name__ == '__main__':
+def main(pipe):
+    pipe.send('Proces zyje')
     app.run(debug=True, host='0.0.0.0')
+    pipe.send('Strona dziala')
+    while True:
+        if pipe.poll(1):
+            rec = pipe.recv()
+
+
+if __name__ == '__main__':
+    main()
