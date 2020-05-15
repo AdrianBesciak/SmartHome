@@ -1,13 +1,15 @@
-import serialdevice
+from system import serialdevice
 import datetime
-import mongoCollection as mongo
-from scheduleChecker import ScheduleChecker
+
+from system import mongoCollection as mongo
+from system import scheduleChecker
+
 
 
 def main(pipe):
     devices_db = mongo.MongoCollection('devices')
     devices_dict = {}
-    schedule = ScheduleChecker()
+    schedule = scheduleChecker.ScheduleChecker()
     lastMinute = datetime.datetime.now().minute
     while True:
         if pipe.poll(1):
@@ -43,6 +45,7 @@ def main(pipe):
             jobs = schedule.checkJobs()
             for job in jobs:
                 devices_dict[job['dev']].talk(job['message'])
+            lastMinute = datetime.datetime.now().minute
 
 if __name__ == "__main__":
     main()
