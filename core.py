@@ -12,9 +12,12 @@ def main():
     p_conn.send({'command': 'register_device', 'dev_type': 'serial', 'dev_port': dev_port})
     dev_name = p_conn.recv()
 
+    print('Tworze serwer webowy')
     web_p_conn, web_c_conn = mp.Pipe()
     web_p = mp.Process(target=httpserver.main, args=(web_c_conn, ))
     web_p.start()
+    print(web_p_conn.recv())
+    print(web_p_conn.recv())
 
     while True:
         s = input()
