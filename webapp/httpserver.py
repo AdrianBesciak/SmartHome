@@ -1,21 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from webapp.forms import RegistrationForm, LoginForm
+from flask_bcrypt import Bcrypt
+from flask_login import LoginManager
+from webapp import *
 
-app = Flask(__name__)
-
-system_core_pipe = None
-
-app.config['SECRET_KEY'] = 'afaa73978854986497574dcae8357ba7'
-
-
-def valid_login(username, password):
-    if username == 'Adrian' and password == 'kij':
-        return True
-    return False
-
-
-def log_user_in(username):
-    return app.route('login/username');
+from system.user import User
 
 
 @app.route('/')
@@ -28,13 +17,9 @@ def home():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        system_core_pipe.send({'command': 'register',
-                               'username': form.username.data,
-                               'email': form.email.data,
-                               'password': form.password.data
-                               })
-        received = system_core_pipe.recv()
         if received['command'] == 'registered' and received['status'] == 'success':
+            hashed_pwd = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+            user = User(username=form.username.data, email=form.email.data, password=hashed_pwd)
             flash(f'Account created for {form.username.data}!', 'success')
             return redirect(url_for('login'))
         else:

@@ -1,12 +1,17 @@
 from system import mongoCollection
 
+db = mongoCollection.MongoCollection('Users')
+
+
+
+
 
 class User:
     def __init__(self, username, email, password):
-        self.db = MongoCollection('Users')
         self.username = username
         self.email = email
         self.__password = password
+        self.__send_to_db__()
 
     def __send_to_db__(self):
         self.db.send({
