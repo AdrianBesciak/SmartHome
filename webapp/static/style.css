@@ -23,3 +23,20 @@ body {
   background-color: #008CBA;
   color: white;
 }
+
+.wrapper {
+  margin-top: 100px;
+  display: flex;
+  align-items: stretch;
+}
+
+#sidebar {
+  background: cadetblue;
+  min-width: 250px;
+  max-width: 250px;
+/*  min-height: 300px;*/
+}
+
+#sidebar.active {
+  margin-left: -250px;
+}
