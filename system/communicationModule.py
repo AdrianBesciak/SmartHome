@@ -14,7 +14,7 @@ def load_devices_from_db(db, dev_dict):
                 dev_dict[serial_device.get_name()] = serial_device
                 print('Loaded device ', serial_device.get_name())
             except:
-                pass
+                print('Device ', dev['dev_name'], ' not found on port ', dev['serial_port'], ' - you can try add this device manually')
 
 
 def main(pipe):
