@@ -34,7 +34,7 @@ class ScheduleChecker:
                 print("Something went wrong while reading an entry.")
                 continue
 
-            if op(getattr(now, job['unit']), job['number']) and \
+            if op(getattr(now, job['unit']), int(job['number'])) and \
                     (job['name'] not in self.__lastCompleted or self.__lastCompleted[job['name']] is not now_reduced):
                 toRet.append({'dev': job['device'], 'com': job['command']})
                 self.__lastCompleted[job['name']] = now_reduced

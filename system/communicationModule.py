@@ -44,7 +44,7 @@ def main(pipe):
         if datetime.datetime.now().minute != lastMinute:
             jobs = schedule.checkJobs()
             for job in jobs:
-                devices_dict[job['dev']].talk(job['message'])
+                devices_dict[job['dev']].talk(job['com'])
             lastMinute = datetime.datetime.now().minute
 
 if __name__ == "__main__":
