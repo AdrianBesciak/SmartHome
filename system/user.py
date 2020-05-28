@@ -1,9 +1,12 @@
 from system import mongoCollection
 
+db = mongoCollection.MongoCollection('Users')
+
+
+
+
 
 class User:
-    db = mongoCollection.MongoCollection('Users')
-
     def __init__(self, username, email, password):
         self.username = username
         self.email = email
