@@ -15,6 +15,12 @@ void setup(void) {
   Serial.begin(9600);
   sensors.begin(); //Inicjalizacja czujnikow
 }
+
+
+void send(String com) {
+  com = com + "}";
+  Serial.println(com);
+}
  
 void loop(void) {
 
@@ -22,28 +28,30 @@ void loop(void) {
   {
     String rec = Serial.readStringUntil('\n');
     if ( rec == "getName" )
-      Serial.println(name);
+      send(name);
     else if ( rec == "getTemperature" )
     {
       sensors.requestTemperatures(); //Pobranie temperatury czujnika
-      Serial.println(sensors.getTempCByIndex(0));  //Wyswietlenie informacji
+      String msg = "Temperature: ";
+      msg = msg + sensors.getTempCByIndex(0);
+      send(msg);  //Wyswietlenie informacji
     }
     else if (rec == "turnOnLED")
     {
       digitalWrite(LEDPin, HIGH);
-      Serial.println("LEDTurnedOn");
+      send("LEDTurnedOn");
     }
     else if (rec == "turnOffLED")
     {
       digitalWrite(LEDPin, LOW);
-      Serial.println("LEDTurnedOff");
+      send("LEDTurnedOff");
     }
     else if (rec == "sendservices")
     {
-      Serial.println("getTemperature;turnOnLED;turnOffLED");
+      send("getTemperature;turnOnLED;turnOffLED");
     }
     else
-      Serial.println(rec);
+      send(rec);
   }
   
 }
