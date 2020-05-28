@@ -5,10 +5,24 @@ from system import mongoCollection as mongo
 from system import scheduleChecker
 
 
+def load_devices_from_db(db, dev_dict):
+    devices_collection = db.getAll()
+    for dev in devices_collection:
+        if dev['dev_type'] == 'serial':
+            try:
+                serialdevice = serialdevice.SerialDevice(dev['serial_port'])
+                dev_dict[serialdevice.get_name()] = serialdevice
+            except:
+                pass
+
+
 
 def main(pipe):
     devices_db = mongo.MongoCollection('devices')
     devices_dict = {}
+
+    load_devices_from_db(devices_db, devices_dict)
+
     schedule = scheduleChecker.ScheduleChecker()
     lastMinute = datetime.datetime.now().minute
     while True:
@@ -25,6 +39,7 @@ def main(pipe):
                     else:
                         post = {'dev_name': dev.get_name(),
                                 'dev_type': rec['dev_type'],
+                                'serial_port': rec['dev_port'],
                                 'services': dev.get_services_list(),
                                 'registration_date': datetime.datetime.now()}
                         devices_db.send(post)
