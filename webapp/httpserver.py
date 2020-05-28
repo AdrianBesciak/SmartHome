@@ -10,7 +10,11 @@ from system.user import User
 @app.route('/')
 @app.route('/home')
 def home():
-    return render_template('index.html')
+    system_core_pipe.send({'command': 'get_devices'})
+    devices = system_core_pipe.recv()
+    for dev in devices:
+        print('httpserver', dev)
+    return render_template('index.html', title='Home', devices=devices)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -47,9 +51,9 @@ def login():
 def main(pipe):
     global system_core_pipe
     system_core_pipe = pipe
-    pipe.send('Proces zyje')
+#    pipe.send('Proces zyje')
     app.run(debug=True, host='0.0.0.0')
-    pipe.send('Strona dziala')
+#    pipe.send('Strona dziala')
     while True:
         if pipe.poll(1):
             rec = pipe.recv()

@@ -44,6 +44,7 @@ def main(pipe):
                                 'services': dev.get_services_list(),
                                 'registration_date': datetime.datetime.now()}
                         devices_db.send(post)
+                    print('\t\tZarejestrowano ', dev.get_name())
 
             elif rec['command'] == 'send2dev':
                 pipe.send(devices_dict[rec['dev_name']].talk(rec['message']))
@@ -53,6 +54,7 @@ def main(pipe):
                 devices_names = []
                 for dev in devices_dict:
                     devices_names.append(dev)
+                print('communicationModule: ', len(devices_names))
                 pipe.send(devices_names)
             else:
                 pipe.send('Unrecognized command')

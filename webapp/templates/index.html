@@ -2,4 +2,11 @@
 {% block content %}
     <h1>SmartHome</h1>
     <a href="/login" class="button"> LogIn </a>
+    <br>
+    <h3>Devices:</h3>
+    {% for dev in devices %}
+        <div class="device">
+            {{ dev }}
+        </div>
+    {% endfor %}
 {% endblock content %}

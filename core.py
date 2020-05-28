@@ -18,10 +18,11 @@ def main():
     web_p_conn, web_c_conn = mp.Pipe()
     web_p = mp.Process(target=httpserver.main, args=(web_c_conn, ))
     web_p.start()
-    print(web_p_conn.recv())
-    print(web_p_conn.recv())
+  #  print(web_p_conn.recv())
+  #  print(web_p_conn.recv())
 
     while True:
+        '''
         s = input()
         if s == "close":
             print("Wychodze")
@@ -97,6 +98,16 @@ def main():
             print(p_conn.recv())
         else:
             print("timed out")
+        '''
+        web_received = web_p_conn.recv()
+        print('core - cos dostalem')
+        if web_received and web_received['command'] == 'get_devices':
+            print('core - to tak komenda')
+            p_conn.send({'command': 'devs'})
+            devices = p_conn.recv()
+            print("Zarejestrowano ", len(devices), 'urzadzen')
+            web_p_conn.send(devices)
+
 
     p.kill()
     exit()
