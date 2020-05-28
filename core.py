@@ -8,6 +8,7 @@ def main():
     p_conn, c_conn = mp.Pipe()
     p = mp.Process(target=cm.main, args=(c_conn,))
     p.start()
+    print(p_conn.recv())
     login = ls.LoginService()
     login.welcome()
     scheduler = ss.ScheduleService(p_conn)

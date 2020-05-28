@@ -10,11 +10,11 @@ def load_devices_from_db(db, dev_dict):
     for dev in devices_collection:
         if dev['dev_type'] == 'serial':
             try:
-                serialdevice = serialdevice.SerialDevice(dev['serial_port'])
-                dev_dict[serialdevice.get_name()] = serialdevice
+                serial_device = serialdevice.SerialDevice(dev['serial_port'])
+                dev_dict[serial_device.get_name()] = serial_device
+                print('Loaded device ', serial_device.get_name())
             except:
                 pass
-
 
 
 def main(pipe):
@@ -22,9 +22,10 @@ def main(pipe):
     devices_dict = {}
 
     load_devices_from_db(devices_db, devices_dict)
+    pipe.send('Loaded devices from database')
 
     schedule = scheduleChecker.ScheduleChecker()
-    lastMinute = datetime.datetime.now().minute
+    last_minute = datetime.datetime.now().minute
     while True:
         if pipe.poll(1):
             rec = pipe.recv()
@@ -56,11 +57,11 @@ def main(pipe):
             else:
                 pipe.send('Unrecognized command')
 
-        if datetime.datetime.now().minute != lastMinute:
+        if datetime.datetime.now().minute != last_minute:
             jobs = schedule.checkJobs()
             for job in jobs:
                 devices_dict[job['dev']].talk(job['com'])
-            lastMinute = datetime.datetime.now().minute
+            last_minute = datetime.datetime.now().minute
 
 if __name__ == "__main__":
     main()
