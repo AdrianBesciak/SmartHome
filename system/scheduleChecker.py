@@ -1,4 +1,4 @@
-import mongoCollection
+from system import mongoCollection
 from datetime import datetime
 from operator import mod, eq
 

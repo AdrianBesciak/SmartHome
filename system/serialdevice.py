@@ -26,4 +26,4 @@ class SerialDevice(device.Device):
         self.device.write(str.encode(command.__str__() + "\n"))
 
     def read(self):
-        return self.device.read_until('\n').decode("utf-8")
+        return self.device.read_until('\n').decode("utf-8").split('}')[0]

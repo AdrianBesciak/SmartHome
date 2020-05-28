@@ -1,4 +1,4 @@
-import mongoCollection
+from system import mongoCollection
 from multiprocessing import Pipe
 
 
