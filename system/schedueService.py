@@ -32,8 +32,10 @@ class ScheduleService:
         name = input("What should the job be called?")
         dev = input("Which device does it use?")
         com = input("What command should be executed?")
-        mod = input("Should it be executed at a given time or periodically?")
-        unit = input("What time unit are we using?")
+        print("Should it be executed at a given time or periodically?")
+        mod = input("Available options: at, every")
+        print("What time unit are we using?")
+        unit = input("Available options: minute, hour, day, month, year")
         num = input("And how many " + unit + "s?")
 
         self.__pipe.send({'command': 'devs'})
@@ -80,7 +82,7 @@ class ScheduleService:
         jobs = self.__task_base.getAll()
         for job in jobs:
             print("Name: " + job['name'] + ", device: " + job['device'] + ", command: " + job['command'])
-            print("Executed" + job['modifier'] + job['number'] + job['unit'] + 's\r\n')
+            print("Executed " + job['modifier'] + " " + job['number'] + " " + job['unit'] + 's\r\n')
 
     def get(self):
         name = input("Which job do you want? All jobs are available with getAll")

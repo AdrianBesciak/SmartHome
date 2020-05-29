@@ -81,7 +81,7 @@ def main():
         elif s == "scheduler":
             scheduler.welcome()
         else:
-            print("Available commands: close, login, logout, devices_list, services, send")
+            print("Available commands: close, login, logout, add_device, devices_list, services, send, scheduler")
             print("Admin commands: grant, revoke")
             """if login.check_privilege("send")
                 p_conn.send({'command': 'send2dev', 'dev_name': dev_name, 'message': s})"""
