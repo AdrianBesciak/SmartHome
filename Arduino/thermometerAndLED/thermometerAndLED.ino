@@ -46,9 +46,22 @@ void loop(void) {
       digitalWrite(LEDPin, LOW);
       send("LEDTurnedOff");
     }
+    else if (rec == "toggleLED")
+    {
+      if (digitalRead(LEDPin))
+      {
+        digitalWrite(LEDPin, LOW);
+        send("LEDTurnedOff");        
+      }
+      else
+      {
+        digitalWrite(LEDPin, HIGH);
+        send("LEDTurnedOn");
+      }
+    }
     else if (rec == "sendservices")
     {
-      send("getTemperature;turnOnLED;turnOffLED");
+      send("getTemperature;turnOnLED;turnOffLED;toggleLED");
     }
     else
       send(rec);

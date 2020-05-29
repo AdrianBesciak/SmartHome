@@ -1,7 +1,7 @@
 import time
 import serial
 from system import device
-#from logger import Logger
+from system.logger import Logger
 
 
 class SerialDevice(device.Device):
