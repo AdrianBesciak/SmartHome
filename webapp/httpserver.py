@@ -17,6 +17,27 @@ def home():
     return render_template('index.html', title='Home', devices=devices)
 
 
+@app.route('/dev/<dev_name>')
+def dev(dev_name):
+    system_core_pipe.send({'command': 'dev_services', 'dev_name': dev_name})
+    services = system_core_pipe.recv()
+    for service in services:
+        print('httpserver', service)
+    return render_template('dev.html', title=dev_name, dev_name=dev_name, services=services)
+
+
+@app.route('/dev/<dev_name>/<service>')
+def run_service(dev_name, service):
+    print('wysylam do ', dev_name, 'komende ', service)
+    system_core_pipe.send({'command': 'run_service', 'dev_name': dev_name, 'service': service})
+    try:
+        print(system_core_pipe.recv())
+    except:
+        pass
+    finally:
+        return dev(dev_name)
+
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()

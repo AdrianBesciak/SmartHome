@@ -101,12 +101,19 @@ def main():
         '''
         web_received = web_p_conn.recv()
         print('core - cos dostalem')
-        if web_received and web_received['command'] == 'get_devices':
-            print('core - to tak komenda')
-            p_conn.send({'command': 'devs'})
-            devices = p_conn.recv()
-            print("Zarejestrowano ", len(devices), 'urzadzen')
-            web_p_conn.send(devices)
+        if web_received:
+            if web_received['command'] == 'get_devices':
+                print('core - to tak komenda')
+                p_conn.send({'command': 'devs'})
+                devices = p_conn.recv()
+                print("Zarejestrowano ", len(devices), 'urzadzen')
+                web_p_conn.send(devices)
+            elif web_received['command'] == 'dev_services':
+                p_conn.send({'command': 'services', 'dev_name': web_received['dev_name']})
+                web_p_conn.send(p_conn.recv())
+            elif web_received['command'] == 'run_service':
+                p_conn.send({'command': 'send2dev', 'dev_name': web_received['dev_name'], 'message': web_received['service']})
+                web_p_conn.send(p_conn.recv())
 
 
     p.kill()

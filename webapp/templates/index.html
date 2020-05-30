@@ -6,7 +6,7 @@
     <h3>Devices:</h3>
     {% for dev in devices %}
         <div class="device">
-            {{ dev }}
+            <a href="/dev/{{ dev }}" class="button"> {{ dev }} </a>
         </div>
     {% endfor %}
 {% endblock content %}
