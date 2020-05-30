@@ -2,6 +2,7 @@ import multiprocessing as mp
 from system import communicationModule as cm
 from system import loginService as ls
 from system import schedueService as ss
+from webapp import httpserver
 
 
 def main():
