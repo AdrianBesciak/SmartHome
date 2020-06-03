@@ -8,4 +8,7 @@
             <a href="/dev/{{dev_name}}/{{service}}" class="button"> {{ service }} </a>
         </div>
     {% endfor %}
+    <br>
+    <br>
+    <a href="{{ url_for('home') }}" class="button"> Go back to device's list </a>
 {% endblock content %}
