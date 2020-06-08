@@ -3,7 +3,8 @@ from system import communicationModule as cm
 from system import loginService as ls
 from system import schedueService as ss
 from webapp import httpserver
-
+from system.interprocess_communication import Webapp2CoreKeys, Webapp2CoreMessages, Core2WebappMessages, Core2WebappKeys
+from system.interprocess_communication import Core2CommunicationModuleKeys, Core2CommunicationModuleValues
 
 def main():
     p_conn, c_conn = mp.Pipe()
@@ -102,18 +103,27 @@ def main():
         web_received = web_p_conn.recv()
         print('core - cos dostalem')
         if web_received:
-            if web_received['command'] == 'get_devices':
+            if web_received[Webapp2CoreKeys.COMMAND] == Webapp2CoreMessages.GET_DEVICES:
                 print('core - to tak komenda')
-                p_conn.send({'command': 'devs'})
+                p_conn.send({Core2CommunicationModuleKeys.COMMAND: Core2CommunicationModuleValues.DEVS})
                 devices = p_conn.recv()
                 print("Zarejestrowano ", len(devices), 'urzadzen')
-                web_p_conn.send(devices)
-            elif web_received['command'] == 'dev_services':
-                p_conn.send({'command': 'services', 'dev_name': web_received['dev_name']})
-                web_p_conn.send(p_conn.recv())
-            elif web_received['command'] == 'run_service':
-                p_conn.send({'command': 'send2dev', 'dev_name': web_received['dev_name'], 'message': web_received['service']})
-                web_p_conn.send(p_conn.recv())
+                web_p_conn.send({Core2WebappKeys.TYPE: Core2WebappMessages.DEVICES,
+                                 Core2WebappKeys.DEVICES_LIST: devices})
+
+            elif web_received[Webapp2CoreKeys.COMMAND] == Webapp2CoreMessages.DEV_SERVICES:
+                p_conn.send({Core2CommunicationModuleKeys.COMMAND: Core2CommunicationModuleValues.SERVICES,
+                             Core2CommunicationModuleKeys.DEV_NAME: web_received[Webapp2CoreKeys.DEV_NAME]})
+
+                web_p_conn.send({Core2WebappKeys.TYPE: Core2WebappMessages.DEV_SERVICES,
+                                 Core2WebappKeys.SERVICES_LIST: p_conn.recv()})
+            elif web_received[Webapp2CoreKeys.COMMAND] == Webapp2CoreMessages.RUN_SERVICE:
+                p_conn.send({Core2CommunicationModuleKeys.COMMAND: Core2CommunicationModuleValues.SEND2DEV,
+                             Core2CommunicationModuleKeys.DEV_NAME: web_received[Webapp2CoreKeys.DEV_NAME],
+                             Core2CommunicationModuleKeys.MESSAGE: web_received[Webapp2CoreKeys.SERVICE]})
+
+                web_p_conn.send({Core2WebappKeys.TYPE: Core2WebappMessages.DEV_RESPONSE,
+                                 Core2WebappMessages.RESPONSE: p_conn.recv()})
 
 
     p.kill()

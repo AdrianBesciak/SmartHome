@@ -3,6 +3,7 @@ import datetime
 
 from system import mongoCollection as mongo
 from system import scheduleChecker
+from system.interprocess_communication import Core2CommunicationModuleKeys, Core2CommunicationModuleValues
 
 
 def load_devices_from_db(db, dev_dict):
@@ -29,9 +30,9 @@ def main(pipe):
     while True:
         if pipe.poll(1):
             rec = pipe.recv()
-            if rec['command'] == 'register_device':
-                if rec['dev_type'] == 'serial':
-                    dev = serialdevice.SerialDevice(rec['dev_port'])
+            if rec[Core2CommunicationModuleKeys.COMMAND] == Core2CommunicationModuleValues.REGISTER_DEVICE:
+                if rec[Core2CommunicationModuleKeys.DEV_TYPE] == Core2CommunicationModuleValues.SERIAL:
+                    dev = serialdevice.SerialDevice(rec[Core2CommunicationModuleKeys.DEV_PORT])
                     devices_dict[dev.get_name()] = dev
                     pipe.send(dev.get_name())
                     print('Registered device: ' + dev.get_name())
@@ -46,11 +47,11 @@ def main(pipe):
                         devices_db.send(post)
                     print('\t\tZarejestrowano ', dev.get_name())
 
-            elif rec['command'] == 'send2dev':
-                pipe.send(devices_dict[rec['dev_name']].talk(rec['message']))
-            elif rec['command'] == 'services':
-                pipe.send(devices_dict[rec['dev_name']].get_services_list())
-            elif rec['command'] == 'devs':
+            elif rec[Core2CommunicationModuleKeys.COMMAND] == Core2CommunicationModuleValues.SEND2DEV:
+                pipe.send(devices_dict[rec[Core2CommunicationModuleKeys.DEV_NAME]].talk(rec[Core2CommunicationModuleKeys.MESSAGE]))
+            elif rec[Core2CommunicationModuleKeys.COMMAND] == Core2CommunicationModuleValues.SERVICES:
+                pipe.send(devices_dict[rec[Core2CommunicationModuleKeys.DEV_NAME]].get_services_list())
+            elif rec[Core2CommunicationModuleKeys.COMMAND] == Core2CommunicationModuleValues.DEVS:
                 devices_names = []
                 for dev in devices_dict:
                     devices_names.append(dev)

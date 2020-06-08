@@ -17,7 +17,7 @@ class SerialDevice(device.Device):
         if not self.device.isOpen():
             print('Nie udalo sie otworzyc portu szeregowego')
         else:
-            time.sleep(2)
+            time.sleep(1)
         self.services = self.get_services_list()
         self.send('getName')
         device.Device.__init__(self, self.read())
