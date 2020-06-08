@@ -1,6 +1,6 @@
 body {
-    background: #100478;
-    color: white;
+    #background: #100478;
+    #color: white;
 }
 
 .button {
@@ -22,4 +22,14 @@ body {
 .submit:hover {
   background-color: #008CBA;
   color: white;
+}
+
+.devices_bar {
+  margin-top: 8px;
+  min-width: 200px;
+  background-color: #100478;
+  height: auto;
+  min-height: 300px;
+  float: left;
+  color: aliceblue;
 }

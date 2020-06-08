@@ -1,11 +1,12 @@
 {% extends "layout.html" %}
 {% block content %}
-    <a href="/login" class="button"> LogIn </a>
     <br>
-    <h3>Devices:</h3>
-    {% for dev in devices %}
-        <div class="device">
-            <a href="/dev/{{ dev }}" class="button"> {{ dev }} </a>
-        </div>
-    {% endfor %}
+    <div class="devices_bar" >
+        <h3>Devices:</h3>
+        {% for dev in devices %}
+            <div class="device">
+                <a href="/dev/{{ dev }}" class="button"> {{ dev }} </a>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock content %}
