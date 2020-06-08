@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from webapp.forms import RegistrationForm, LoginForm
 from flask_bcrypt import Bcrypt
-from flask_login import LoginManager
+from flask_login import LoginManager, login_user
 from webapp import *
 
 from system.user import User
@@ -70,10 +70,11 @@ def login():
             '''
 
         user = User.get_by_email(form.email.data)
-        if user is None or user.get_password() != bcrypt.generate_password_hash(form.password.data).decode('utf-8'):
-            flash('Invalid username or password')
+        if user is None or not bcrypt.check_password_hash(user.get_password(), form.password.data):
+            flash('Invalid username or password', 'danger')
             return render_template('login.html', title='Login', form=form)
         login_user(user, remember=True)
+        flash('Logged in!', 'success')
         return redirect(url_for('home'))
 
     return render_template('login.html', title='Login', form=form)

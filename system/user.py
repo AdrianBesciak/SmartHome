@@ -13,6 +13,7 @@ class User:
         self.is_active = False
         self.is_anonymous = True
         # self.__send_to_db__()
+        self.id=None
 
     def send_to_db(self):
         self.db.send({
@@ -41,7 +42,11 @@ class User:
         return self.__password
 
     def get_id(self):
-        return self.email
+        if self.id is None:
+            self_dict = User.db.get('email', self.email)
+            if self_dict is not None:
+                self.id = self_dict['_id']
+        return str(self.id)
 
 
 
