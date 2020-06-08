@@ -42,13 +42,13 @@ def run_service(dev_name, service):
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        if received['command'] == 'registered' and received['status'] == 'success':
-            hashed_pwd = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-            user = User(username=form.username.data, email=form.email.data, password=hashed_pwd)
-            flash(f'Account created for {form.username.data}!', 'success')
-            return redirect(url_for('login'))
-        else:
-            flash(f'Account not created - system failure', 'danger')
+        hashed_pwd = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user = User(username=form.username.data, email=form.email.data, password=hashed_pwd, privileges=[])
+        user.send_to_db()
+        flash(f'Account created for {form.username.data}!', 'success')
+        return redirect(url_for('login'))
+    else:
+        flash(f'Account not created - system failure', 'danger')
     return render_template('register.html', title='Register', form=form)
 
 

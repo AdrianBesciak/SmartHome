@@ -14,12 +14,18 @@ class User:
         self.is_anonymous = True
         # self.__send_to_db__()
 
-    def __send_to_db__(self):
+    def send_to_db(self):
         self.db.send({
             "username": self.username,
             "email": self.email,
-            "password": self.__password
+            "password": self.__password,
+            "privileges": self.privileges
         })
+
+    def check_privilege(priv):
+        if priv in self.privileges:
+            return True
+        return False
 
     def auth(self, bool):
         if bool:
@@ -43,13 +49,13 @@ class User:
         return (self.username is not None) and (self.__password is not None)
 
     @staticmethod
-    def get_by_email(self, email):
-        user_dict = self.db.get('email', email)
+    def get_by_email(email):
+        user_dict = User.db.get('email', email)
         if user_dict is not None:
-            user = User(user_dict['username'], user_dict['email'], user_dict['password'],user_dict[''] )
+            user = User(user_dict['username'], user_dict['email'], user_dict['password'],user_dict['privileges'] )
             user.auth(True)
             return user
         else:
-            user = User(None, None, None)
+            user = User(None, None, None, [])
             user.auth(False)
             return user

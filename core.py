@@ -11,7 +11,7 @@ def main():
     p.start()
     print(p_conn.recv())
     login = ls.LoginService()
-    login.welcome()
+    #login.welcome()
     scheduler = ss.ScheduleService(p_conn)
 
     print('Tworze serwer webowy')
