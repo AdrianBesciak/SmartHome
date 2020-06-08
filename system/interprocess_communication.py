@@ -25,7 +25,9 @@ class Core2WebappMessages(Enum):
     DEV_RESPONSE = 1,
     DEV_SERVICES = 2,
     RESPONSE = 3,
-    DEVICES = 4
+    DEVICES = 4,
+    REGISTERED = 5,
+    STATUS = 6
 
 
 class Core2CommunicationModuleKeys(Enum):
