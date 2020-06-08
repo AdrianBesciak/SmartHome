@@ -56,6 +56,7 @@ def register():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
+        '''
         system_core_pipe.send({'command': 'login',
                                'email': form.email.data,
                                'password': form.password.data
@@ -66,6 +67,15 @@ def login():
             return redirect(url_for('home'))
         else:
             flash('Login unsuccesfull. Please check username and password', 'danger')
+            '''
+
+        user = User.get_by_email(form.email.data)
+        if user is None or user.get_password() != bcrypt.generate_password_hash(form.password.data).decode('utf-8'):
+            flash('Invalid username or password')
+            return render_template('login.html', title='Login', form=form)
+        login_user(user, remember=True)
+        return redirect(url_for('home'))
+
     return render_template('login.html', title='Login', form=form)
 
 

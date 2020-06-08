@@ -13,6 +13,8 @@ app.config['SECRET_KEY'] = 'afaa73978854986497574dcae8357ba7'
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
 
+
 @login_manager.user_loader
 def load_user(user_id):
-    return db.get('id', user_id);
+    user_dict = User.db.get('id', user_id)
+    return User(user_dict['username'], user_dict['email'], user_dict['password'])
