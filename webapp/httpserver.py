@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from webapp.forms import RegistrationForm, LoginForm
 from flask_bcrypt import Bcrypt
-from flask_login import LoginManager
+from flask_login import LoginManager, login_user
 from webapp import *
 import time
 from system.interprocess_communication import Webapp2CoreMessages, Webapp2CoreKeys, Core2WebappKeys, Core2WebappMessages
@@ -39,7 +39,6 @@ def dev(dev_name):
     return render_template('dev.html', title=dev_name, dev_name=dev_name, services=services[Core2WebappKeys.SERVICES_LIST])
 
 
-
 @app.route('/dev/<dev_name>/<service>')
 def run_service(dev_name, service):
     print('wysylam do ', dev_name, 'komende ', service)
@@ -57,13 +56,13 @@ def run_service(dev_name, service):
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        if received['command'] == 'registered' and received['status'] == 'success':
-            hashed_pwd = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-            user = User(username=form.username.data, email=form.email.data, password=hashed_pwd)
-            flash(f'Account created for {form.username.data}!', 'success')
-            return redirect(url_for('login'))
-        else:
-            flash(f'Account not created - system failure', 'danger')
+        hashed_pwd = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user = User(username=form.username.data, email=form.email.data, password=hashed_pwd, privileges=[])
+        user.send_to_db()
+        flash(f'Account created for {form.username.data}!', 'success')
+        return redirect(url_for('login'))
+    else:
+        flash(f'Account not created - system failure', 'danger')
     return render_template('register.html', title='Register', form=form)
 
 
@@ -71,16 +70,14 @@ def register():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        system_core_pipe.send({'command': Webapp2CoreMessages.LOGIN,
-                               'email': form.email.data,
-                               'password': form.password.data
-                               })
-        received = system_core_pipe.recv()
-        if received['command'] == 'registered' and received['status'] == 'success':
-            flash('You have been logged in!', 'success')
-            return redirect(url_for('home'))
-        else:
-            flash('Login unsuccesfull. Please check username and password', 'danger')
+        user = User.get_by_email(form.email.data)
+        if user is None or not bcrypt.check_password_hash(user.get_password(), form.password.data):
+            flash('Invalid username or password', 'danger')
+            return render_template('login.html', title='Login', form=form)
+        login_user(user, remember=True)
+        flash('Logged in!', 'success')
+        return redirect(url_for('home'))
+
     return render_template('login.html', title='Login', form=form)
 
 
