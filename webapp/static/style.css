@@ -8,6 +8,7 @@ body {
   border: none;
   color: black;
   padding: 15px 32px;
+  margin: 5px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
@@ -27,9 +28,17 @@ body {
 .devices_bar {
   margin-top: 8px;
   min-width: 200px;
-  background-color: #100478;
+  background-color: #0000ff;
   height: auto;
-  min-height: 300px;
+  min-height: 700px;
   float: left;
   color: aliceblue;
+}
+
+.device_services_bar {
+  margin-top: 8px;
+  min-width: 200px;
+  background-color: #3366ff;
+  float: left;
+  min-height: 700px;
 }

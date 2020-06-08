@@ -1,14 +1,11 @@
-{% extends "layout.html" %}
-{% block content %}
-    <br>
-    <br>
-    <h3> {{ dev_name }} services:</h3>
-    {% for service in services %}
-        <div class="service">
-            <a href="/dev/{{dev_name}}/{{service}}" class="button"> {{ service }} </a>
-        </div>
-    {% endfor %}
-    <br>
-    <br>
-    <a href="{{ url_for('home') }}" class="button"> Go back to device's list </a>
-{% endblock content %}
+{% extends "index.html" %}
+{% block device_services %}
+    <dev class="device_services_bar">
+        <h3> {{ dev_name }} services:</h3>
+        {% for service in services %}
+            <div class="service">
+                <a href="/dev/{{dev_name}}/{{service}}" class="button"> {{ service }} </a>
+            </div>
+        {% endfor %}
+    </dev>
+{% endblock device_services %}
