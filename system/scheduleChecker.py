@@ -25,7 +25,7 @@ def check_timestamp_delayed():
     stamp.close()
     then = datetime.strptime(then_str, "%Y/%m/%d, %H:%M")
     diff = now - then
-    if floor(diff.total_seconds() / 60) > 5:
+    if floor(diff.total_seconds() / 60) >= 5:
         return True
     return False
 
