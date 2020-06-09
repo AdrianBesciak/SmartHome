@@ -137,15 +137,15 @@ def main():
                 web_p_conn.send({Core2WebappKeys.TYPE: Core2WebappMessages.DEV_RESPONSE,
                                  Core2WebappMessages.RESPONSE: p_conn.recv()})
 
-        '''if datetime.datetime.now().minute != last_minute:
+        if datetime.datetime.now().minute != last_minute:
             jobs = schedule_checker.checkJobs()
             for job in jobs:
                 #devices_dict[job['dev']].talk(job['com'])
                 p_conn.send({Core2CommunicationModuleKeys.COMMAND: Core2CommunicationModuleValues.SEND2DEV,
                              Core2CommunicationModuleKeys.DEV_NAME: job['dev'],
                              Core2CommunicationModuleKeys.MESSAGE: job['com']})
-            schedule_checker.set_timestamp()
-            last_minute = datetime.datetime.now().minute'''
+            scheduleChecker.set_timestamp()
+            last_minute = datetime.datetime.now().minute
 
     p.kill()
     exit()
