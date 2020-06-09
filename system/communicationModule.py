@@ -54,7 +54,6 @@ def main(pipe):
                 devices_names = []
                 for dev in devices_dict:
                     devices_names.append(dev)
-                print('communicationModule: ', len(devices_names))
                 pipe.send(devices_names)
             else:
                 pipe.send('Unrecognized command')

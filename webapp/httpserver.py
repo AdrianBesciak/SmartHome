@@ -94,7 +94,7 @@ def admin():
     if not user.is_authenticated or not user.is_admin():
         flash('You are not allowed to visit admin\'s page', 'info')
         return redirect(url_for('home'))
-    return render_template('admin.html')
+    return render_template('admin.html', title='Cockpit', devices=get_devices())
 
 
 @app.route('/admin/register_device', methods=['GET', 'POST'])
