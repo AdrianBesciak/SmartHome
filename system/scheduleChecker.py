@@ -3,9 +3,10 @@ from datetime import datetime
 from operator import mod, eq
 from math import floor
 
+timestamp_file_path = '/tmp/timestamp.txt'
 
 def check_timestamp():
-    stamp = open('timestamp.txt', 'r')
+    stamp = open(timestamp_file_path, 'r')
     str = stamp.read()
     stamp.close()
     if str == datetime.now().strftime("%Y/%m/%d, %H:%M"):
@@ -14,14 +15,14 @@ def check_timestamp():
 
 
 def set_timestamp():
-    stamp = open('timestamp.txt', 'w')
+    stamp = open(timestamp_file_path, 'w')
     stamp.write(datetime.now().strftime("%Y/%m/%d, %H:%M"))
     stamp.close()
 
 
 def check_timestamp_delayed():
     now = datetime.now()
-    stamp = open('timestamp.txt', 'r')
+    stamp = open(timestamp_file_path, 'r')
     then_str = stamp.read()
     stamp.close()
     then = datetime.strptime(then_str, "%Y/%m/%d, %H:%M")
