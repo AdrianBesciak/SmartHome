@@ -137,8 +137,7 @@ def main():
                 p_conn.send({Core2CommunicationModuleKeys.COMMAND: Core2CommunicationModuleValues.SEND2DEV,
                              Core2CommunicationModuleKeys.DEV_NAME: job['dev'],
                              Core2CommunicationModuleKeys.MESSAGE: job['com']})
-            if jobs:
-                schedule_checker.set_timestamp()
+            schedule_checker.set_timestamp()
             last_minute = datetime.datetime.now().minute
 
     p.kill()

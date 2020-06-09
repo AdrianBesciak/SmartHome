@@ -1,7 +1,7 @@
 from system import mongoCollection
 from datetime import datetime
 from operator import mod, eq
-
+from math import floor
 
 def check_timestamp():
     stamp = open('timestamp.txt', 'r')
@@ -26,8 +26,8 @@ def check_timestamp_delayed():
     then = datetime.strptime(then_str, "%Y/%m/%d, %H:%M")
     diff = now - then
     if floor(diff.total_seconds() / 60) > 5:
-        return False
-    return True
+        return True
+    return False
 
 
 class ScheduleChecker:

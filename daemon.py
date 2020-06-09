@@ -1,4 +1,5 @@
 from system import scheduleChecker
+from system.interprocess_communication import Core2CommunicationModuleKeys, Core2CommunicationModuleValues
 
 if __name__ == "__main__":
     main()
@@ -16,6 +17,8 @@ def executeJobs(jobs):
         p_conn.send({Core2CommunicationModuleKeys.COMMAND: Core2CommunicationModuleValues.SEND2DEV,
                      Core2CommunicationModuleKeys.DEV_NAME: job['dev'],
                      Core2CommunicationModuleKeys.MESSAGE: job['com']})
+        p_conn.recv()
+    p.kill()
 
 
 def main():
