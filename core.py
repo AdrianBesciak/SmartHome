@@ -137,6 +137,9 @@ def main():
                 web_p_conn.send({Core2WebappKeys.TYPE: Core2WebappMessages.DEV_RESPONSE,
                                  Core2WebappMessages.RESPONSE: p_conn.recv()})
 
+            elif  web_received[Webapp2CoreKeys.COMMAND] == Webapp2CoreMessages.REGISTER_SCHEDULE:
+                scheduler.quick_register(web_received[Webapp2CoreKeys.TASK])
+
         if datetime.datetime.now().minute != last_minute:
             jobs = schedule_checker.checkJobs()
             for job in jobs:

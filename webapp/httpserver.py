@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
-from webapp.forms import RegistrationForm, LoginForm, NewDeviceForm
+from webapp.forms import RegistrationForm, LoginForm, NewDeviceForm, NewScheduleForm
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 from webapp import *
@@ -105,6 +105,23 @@ def register_new_device():
             flash("Registered device: "+received[Core2WebappMessages.RESPONSE], 'info')
     return render_template('add_device.html', title="Added", form=form)
 
+
+@app.route('addNewSchedule')
+def add_new_schedule():
+    form = NewScheduleForm()
+    if form.validate_on_submit():
+        system_core_pipe.send({
+            Webapp2CoreKeys.COMMAND: Webapp2CoreMessages.REGISTER_SCHEDULE,
+            Webapp2CoreKeys.TASK : {
+                'name': form.name.data,
+                'device': form.dev.data,
+                'command': form.comm.data,
+                'modifier': form.mod.data,
+                'number': form.num.data,
+                'unit': form.unit.data
+            }
+        })
+        flash("Registered task!"+form.name.data, 'info')
 
 
 def main(pipe):

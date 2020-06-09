@@ -6,14 +6,16 @@ class Webapp2CoreMessages(Enum):
     DEV_SERVICES = 2,
     RUN_SERVICE = 3,
     LOGIN = 4,
-    REGISTER_DEVICE = 5
+    REGISTER_DEVICE = 5,
+    REGISTER_SCHEDULE = 6
 
 
 class Webapp2CoreKeys(Enum):
     COMMAND = 1,
     DEV_NAME = 2,
     SERVICE = 3,
-    DEVICE_TYPE = 4
+    DEVICE_TYPE = 4,
+    TASK = 5
 
 
 class Core2WebappKeys(Enum):

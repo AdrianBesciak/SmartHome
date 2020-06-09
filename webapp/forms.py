@@ -34,5 +34,23 @@ class NewDeviceForm(FlaskForm):
     port = StringField('port', validators=[DataRequired()])
     submit = SubmitField('Register')
 
+
+class NewScheduleForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired()])
+    dev = StringField('Device', validators=[DataRequired()])
+    comm = StringField('Command', validators=[DataRequired()])
+    mod = StringField('Modifier', validators=[DataRequired()])
+    unit = StringField('Unit', validators=[DataRequired()])
+    num = StringField('Number', validators=[DataRequired()])
+
+    def validate_mod(self, mod):
+        if mod not in ['at', 'every']:
+            raise ValidationError("Modifier has to be either at or every")
+
+    def validate_unit(self, unit):
+        if unit not in ['year', 'month', 'day', 'hour', 'minute']:
+            raise ValidationError("Please use a valid unit! Valid units include year, month, day, hour, minute.")
+
+
 if __name__ == '__main__':
     pass

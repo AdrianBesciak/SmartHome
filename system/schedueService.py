@@ -69,6 +69,9 @@ class ScheduleService:
         self.__task_base.send(job)
         print("Task added!")
 
+    def quick_register(self, task):
+        self.__task_base.send(task)
+
     def remove(self):
         name = input("Which job is to be deleted? All jobs are available with getAll")
         job = self.__task_base.get("name", name)
