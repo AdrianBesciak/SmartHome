@@ -37,10 +37,12 @@ def main(pipe):
                         print("Device: " + dev.get_name() + " already exists in db.")
                     else:
                         post = {'dev_name': dev.get_name(),
-                                'dev_type': rec['dev_type'],
-                                'serial_port': rec['dev_port'],
+                                'dev_type': rec[Core2CommunicationModuleKeys.DEV_TYPE],
+                                'serial_port': rec[Core2CommunicationModuleKeys.DEV_PORT],
                                 'services': dev.get_services_list(),
                                 'registration_date': datetime.datetime.now()}
+                        if post['dev_type'] == Core2CommunicationModuleValues.SERIAL:
+                            post['dev_type'] = 'serial'
                         devices_db.send(post)
                     print('\t\tZarejestrowano ', dev.get_name())
 

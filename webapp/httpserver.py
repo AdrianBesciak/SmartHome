@@ -86,13 +86,17 @@ def logout():
 @app.route('/admin')
 def admin():
     user = current_user
-    if not user or not user.is_admin():
+    if not user.is_authenticated or not user.is_admin():
         flash('You are not allowed to visit admin\'s page', 'info')
         return redirect(url_for('home'))
     return render_template('admin.html')
 
 @app.route('/admin/register_device', methods=['GET', 'POST'])
 def register_new_device():
+    user = current_user
+    if not user.is_authenticated or not user.is_admin():
+        flash('You are not allowed to visit admin\'s page', 'info')
+        return redirect(url_for('home'))
     form = NewDeviceForm()
     if form.validate_on_submit():
         if form.mode.data != 'serial':
