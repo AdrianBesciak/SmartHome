@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
-from webapp.forms import RegistrationForm, LoginForm
+from webapp.forms import RegistrationForm, LoginForm, NewDeviceForm
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 from webapp import *
@@ -16,11 +16,11 @@ def get_devices():
         devices = system_core_pipe()
     return devices[Core2WebappKeys.DEVICES_LIST]
 
+
 @app.route('/')
 @app.route('/home')
 def home():
     system_core_pipe.send({Webapp2CoreKeys.COMMAND: Webapp2CoreMessages.GET_DEVICES})
-    print('HOME: ', current_user, 'zalogowany? ', current_user.is_authenticated)
     return render_template('index.html', title='Home', devices=get_devices())
 
 
@@ -35,6 +35,10 @@ def dev(dev_name):
 
 @app.route('/dev/<dev_name>/<service>')
 def run_service(dev_name, service):
+    user = current_user
+    if not user.is_authenticated or not user.check_privilege(dev_name):
+        flash('You are not allowed to use ' + dev_name + ' device', 'info')
+        return redirect(url_for('home'))
     system_core_pipe.send({Webapp2CoreKeys.COMMAND: Webapp2CoreMessages.RUN_SERVICE, Webapp2CoreKeys.DEV_NAME: dev_name, Webapp2CoreKeys.SERVICE: service})
     time.sleep(1)
     received = system_core_pipe.recv()
