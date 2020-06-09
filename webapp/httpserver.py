@@ -83,6 +83,7 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
+
 @app.route('/admin')
 def admin():
     user = current_user
@@ -90,6 +91,7 @@ def admin():
         flash('You are not allowed to visit admin\'s page', 'info')
         return redirect(url_for('home'))
     return render_template('admin.html')
+
 
 @app.route('/admin/register_device', methods=['GET', 'POST'])
 def register_new_device():
@@ -110,13 +112,17 @@ def register_new_device():
     return render_template('add_device.html', title="Added", form=form)
 
 
-@app.route('addNewSchedule')
+@app.route('/admin/add_new_schedule', methods=['GET', 'POST'])
 def add_new_schedule():
+    user = current_user
+    if not user.is_authenticated or not user.is_admin():
+        flash('You are not allowed to visit admin\'s page', 'info')
+        return redirect(url_for('home'))
     form = NewScheduleForm()
     if form.validate_on_submit():
         system_core_pipe.send({
             Webapp2CoreKeys.COMMAND: Webapp2CoreMessages.REGISTER_SCHEDULE,
-            Webapp2CoreKeys.TASK : {
+            Webapp2CoreKeys.TASK: {
                 'name': form.name.data,
                 'device': form.dev.data,
                 'command': form.comm.data,
@@ -125,7 +131,9 @@ def add_new_schedule():
                 'unit': form.unit.data
             }
         })
+        response = system_core_pipe.recv()
         flash("Registered task!"+form.name.data, 'info')
+    return render_template('add_new_schedule.html', title="Added", form=form)
 
 
 def main(pipe):
