@@ -22,7 +22,8 @@ class Core2WebappKeys(Enum):
     TYPE = 1,
     RESPONSE = 2,
     DEVICES_LIST = 3,
-    SERVICES_LIST = 4
+    SERVICES_LIST = 4,
+    INFO = 5
 
 
 class Core2WebappMessages(Enum):

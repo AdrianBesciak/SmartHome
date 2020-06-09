@@ -131,7 +131,9 @@ def add_new_schedule():
                 'unit': form.unit.data
             }
         })
-        flash("Registered task!" + form.name.data, 'info')
+        response = system_core_pipe.recv()
+        if response[Core2WebappKeys.TYPE] == Core2WebappMessages.RESPONSE:
+            flash(response[Core2WebappKeys.MESSAGE], 'info')
 
 
 def main(pipe):
