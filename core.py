@@ -139,6 +139,7 @@ def main():
                 Core2WebappKeys.MESSAGE: str
                 })
 
+
         if datetime.datetime.now().minute != last_minute:
             jobs = schedule_checker.checkJobs()
             for job in jobs:

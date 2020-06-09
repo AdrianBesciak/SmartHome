@@ -116,8 +116,12 @@ def register_new_device():
     return render_template('add_device.html', title="Added", form=form)
 
 
-@app.route('addNewSchedule')
+@app.route('/admin/add_new_schedule', methods=['GET', 'POST'])
 def add_new_schedule():
+    user = current_user
+    if not user.is_authenticated or not user.is_admin():
+        flash('You are not allowed to visit admin\'s page', 'info')
+        return redirect(url_for('home'))
     form = NewScheduleForm()
     if form.validate_on_submit():
         system_core_pipe.send({
@@ -134,6 +138,8 @@ def add_new_schedule():
         response = system_core_pipe.recv()
         if response[Core2WebappKeys.TYPE] == Core2WebappMessages.RESPONSE:
             flash(response[Core2WebappKeys.MESSAGE], 'info')
+    return render_template('add_new_schedule.html', title="Added", form=form)
+
 
 
 def main(pipe):

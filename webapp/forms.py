@@ -32,7 +32,7 @@ class LoginForm(FlaskForm):
 class NewDeviceForm(FlaskForm):
     mode = StringField('mode', validators=[DataRequired()])
     port = StringField('port', validators=[DataRequired()])
-    submit = SubmitField('Register')
+    submit = SubmitField('Add device')
 
 
 class NewScheduleForm(FlaskForm):
@@ -42,6 +42,7 @@ class NewScheduleForm(FlaskForm):
     mod = StringField('Modifier', validators=[DataRequired()])
     unit = StringField('Unit', validators=[DataRequired()])
     num = StringField('Number', validators=[DataRequired()])
+    submit = SubmitField('Add task')
 
     def validate_mod(self, mod):
         if mod not in ['at', 'every']:
