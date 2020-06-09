@@ -2,7 +2,6 @@ from system import serialdevice
 import datetime
 
 from system import mongoCollection as mongo
-from system import scheduleChecker
 from system.interprocess_communication import Core2CommunicationModuleKeys, Core2CommunicationModuleValues
 
 
@@ -25,8 +24,6 @@ def main(pipe):
     load_devices_from_db(devices_db, devices_dict)
     pipe.send('Loaded devices from database')
 
-    schedule = scheduleChecker.ScheduleChecker()
-    last_minute = datetime.datetime.now().minute
     while True:
         if pipe.poll(1):
             rec = pipe.recv()
@@ -60,11 +57,7 @@ def main(pipe):
             else:
                 pipe.send('Unrecognized command')
 
-        if datetime.datetime.now().minute != last_minute:
-            jobs = schedule.checkJobs()
-            for job in jobs:
-                devices_dict[job['dev']].talk(job['com'])
-            last_minute = datetime.datetime.now().minute
+
 
 if __name__ == "__main__":
     main()
