@@ -14,8 +14,6 @@ def get_devices():
     while devices.get(Core2WebappKeys.TYPE) == Core2WebappMessages.DEV_RESPONSE:  # TUTAJ BUG, BO NIE UZYWAM GETA
         flash(devices[Core2WebappKeys.RESPONSE], 'info')
         devices = system_core_pipe()
-    for dev in devices[Core2WebappKeys.DEVICES_LIST]:
-        print('httpserver', dev)
     return devices[Core2WebappKeys.DEVICES_LIST]
 
 @app.route('/')
@@ -31,17 +29,12 @@ def dev(dev_name):
     services = system_core_pipe.recv()
     while services[Core2WebappKeys.TYPE] != Core2WebappMessages.DEV_SERVICES:
         services = system_core_pipe.recv()
-    if services[Core2WebappKeys.TYPE] == Core2WebappMessages.DEV_SERVICES:
-        for service in services[Core2WebappKeys.SERVICES_LIST]:
-            print('httpserver', service)
     return render_template('dev.html', title=dev_name, dev_name=dev_name, devices=get_devices(), services=services[Core2WebappKeys.SERVICES_LIST])
 
 
 @app.route('/dev/<dev_name>/<service>')
 def run_service(dev_name, service):
-    print('wysylam do ', dev_name, 'komende ', service)
     system_core_pipe.send({Webapp2CoreKeys.COMMAND: Webapp2CoreMessages.RUN_SERVICE, Webapp2CoreKeys.DEV_NAME: dev_name, Webapp2CoreKeys.SERVICE: service})
-    print('Wyslalem')
     time.sleep(1)
     received = system_core_pipe.recv()
     if received[Core2WebappKeys.TYPE] == Core2WebappMessages.DEV_RESPONSE:
@@ -92,6 +85,7 @@ def admin():
 @app.route('/admin/register_device', methods=['GET', 'POST'])
 def register_new_device():
     form = NewDeviceForm()
+
 
 
 def main(pipe):

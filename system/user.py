@@ -35,12 +35,8 @@ class User(UserMixin):
     def auth(self, bool):
         if bool:
             self.is_authenticated = True
-            #self.is_active = True
-            #self.is_anonymous = False
         else:
             self.is_authenticated = False
-            #self.is_active = False
-            #self.is_anonymous = True
 
     def get_password(self):
         return self.__password

@@ -29,5 +29,10 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Login')
 
 
+class NewDeviceForm(FlaskForm):
+    mode = StringField('mode', validators=[DataRequired()])
+    port = StringField('port', validators=[DataRequired()])
+    submit = SubmitField('Register')
+
 if __name__ == '__main__':
     pass
