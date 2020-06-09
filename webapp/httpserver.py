@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from webapp.forms import RegistrationForm, LoginForm
 from flask_bcrypt import Bcrypt
-from flask_login import LoginManager, login_user
+from flask_login import LoginManager, login_user, login_required, current_user
 from webapp import *
 import time
 from system.interprocess_communication import Webapp2CoreMessages, Webapp2CoreKeys, Core2WebappKeys, Core2WebappMessages
@@ -77,6 +77,16 @@ def login():
         return redirect(url_for('home'))
 
     return render_template('login.html', title='Login', form=form)
+
+
+@app.route('/admin')
+#@login_required
+def admin():
+    user = current_user.is_authenticated
+    if not user:# or not user.is_admin():
+        flash('You are not allowed to visit admin\'s page', 'info')
+        return redirect(url_for('home'))
+    return render_template('admin.html')
 
 
 def main(pipe):

@@ -92,3 +92,8 @@ class ScheduleService:
         else:
             print("Name: " + job['name'] + ", device: " + job['device'] + ", command: " + job['command'])
             print("Executed" + job['modifier'] + job['number'] + job['unit'] + 's\r\n')
+
+'''
+Example task for db:
+{ "name" : "try", "device" : "dev2", "modifier" : "every", "number" : "2", "unit" : "minute", "command" : "doubleSoundSignal" }
+'''
