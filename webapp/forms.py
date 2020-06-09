@@ -38,10 +38,10 @@ class NewDeviceForm(FlaskForm):
 class NewScheduleForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
     dev = StringField('Device', validators=[DataRequired()])
-    comm = StringField('Command', validators=[DataRequired()])
-    mod = StringField('Modifier', validators=[DataRequired()])
-    unit = StringField('Unit', validators=[DataRequired()])
-    num = StringField('Number', validators=[DataRequired()])
+    comm = StringField('Service', validators=[DataRequired()])
+    mod = StringField('Modifier (at/every)', validators=[DataRequired()])
+    unit = StringField('Unit (Available options: minute, hour, day, month, year)', validators=[DataRequired()])
+    num = StringField('Interval', validators=[DataRequired()])
     submit = SubmitField('Add task')
 
     def validate_mod(self, mod):
