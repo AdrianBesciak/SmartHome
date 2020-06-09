@@ -1,8 +1,8 @@
 from system import mongoCollection
-from flask_login import AnonymousUserMixin
+from flask_login import UserMixin
 
 
-class User(AnonymousUserMixin):
+class User(UserMixin):
     db = mongoCollection.MongoCollection('Users')
 
     def __init__(self, username, email, password, privileges):
@@ -46,14 +46,16 @@ class User(AnonymousUserMixin):
         return self.__password
 
     def get_id(self):
-        if self.id is None:
-            self_dict = User.db.get('email', self.email)
-            if self_dict is not None:
-                self.id = self_dict['_id']
-        return str(self.id)
+        return self.email
 
     def is_authenticated(self):
-        return (self.username is not None) and (self.__password is not None)
+        return True
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
 
     @staticmethod
     def get_by_email(email):

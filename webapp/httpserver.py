@@ -72,6 +72,7 @@ def login():
         if user is None or not bcrypt.check_password_hash(user.get_password(), form.password.data):
             flash('Invalid username or password', 'danger')
             return render_template('login.html', title='Login', form=form)
+        user.auth(True)
         login_user(user, remember=True)
         flash('Logged in!', 'success')
         return redirect(url_for('home'))
@@ -82,11 +83,15 @@ def login():
 @app.route('/admin')
 #@login_required
 def admin():
-    user = current_user.is_authenticated
-    if not user:# or not user.is_admin():
+    user = current_user
+    if not user or not user.is_admin():
         flash('You are not allowed to visit admin\'s page', 'info')
         return redirect(url_for('home'))
     return render_template('admin.html')
+
+@app.route('/admin/register_device', methods=['GET', 'POST'])
+def register_new_device():
+    form = NewDeviceForm()
 
 
 def main(pipe):
