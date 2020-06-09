@@ -137,7 +137,7 @@ def add_new_schedule():
         })
         response = system_core_pipe.recv()
         if response[Core2WebappKeys.TYPE] == Core2WebappMessages.RESPONSE:
-            flash(response[Core2WebappKeys.MESSAGE], 'info')
+            flash(response[Core2WebappKeys.RESPONSE], 'info')
     return render_template('add_new_schedule.html', title="Added", form=form)
 
 

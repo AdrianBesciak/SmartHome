@@ -45,11 +45,11 @@ class NewScheduleForm(FlaskForm):
     submit = SubmitField('Add task')
 
     def validate_mod(self, mod):
-        if mod not in ['at', 'every']:
+        if mod.data not in ['at', 'every']:
             raise ValidationError("Modifier has to be either at or every")
 
     def validate_unit(self, unit):
-        if unit not in ['year', 'month', 'day', 'hour', 'minute']:
+        if unit.data not in ['year', 'month', 'day', 'hour', 'minute']:
             raise ValidationError("Please use a valid unit! Valid units include year, month, day, hour, minute.")
 
 
