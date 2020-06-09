@@ -8,23 +8,21 @@ from system.interprocess_communication import Webapp2CoreMessages, Webapp2CoreKe
 
 from system.user import User
 
+def get_devices():
+    system_core_pipe.send({Webapp2CoreKeys.COMMAND: Webapp2CoreMessages.GET_DEVICES})
+    devices = system_core_pipe.recv()
+    while devices.get(Core2WebappKeys.TYPE) == Core2WebappMessages.DEV_RESPONSE:  # TUTAJ BUG, BO NIE UZYWAM GETA
+        flash(devices[Core2WebappKeys.RESPONSE], 'info')
+        devices = system_core_pipe()
+    for dev in devices[Core2WebappKeys.DEVICES_LIST]:
+        print('httpserver', dev)
+    return devices[Core2WebappKeys.DEVICES_LIST]
 
 @app.route('/')
 @app.route('/home')
 def home():
     system_core_pipe.send({Webapp2CoreKeys.COMMAND: Webapp2CoreMessages.GET_DEVICES})
-    try:
-        devices = system_core_pipe.recv()
-        while devices.get(Core2WebappKeys.TYPE) == Core2WebappMessages.DEV_RESPONSE:  #TUTAJ BUG, BO NIE UZYWAM GETA
-            flash(devices[Core2WebappKeys.RESPONSE], 'info')
-            devices = system_core_pipe()
-        for dev in devices[Core2WebappKeys.DEVICES_LIST]:
-            print('httpserver', dev)
-    except:
-        flash('Reload page', 'danger')
-        devices[Core2WebappKeys.DEVICES_LIST] = []
-
-    return render_template('index.html', title='Home', devices=devices[Core2WebappKeys.DEVICES_LIST])
+    return render_template('index.html', title='Home', devices=get_devices())
 
 
 @app.route('/dev/<dev_name>')
@@ -36,7 +34,7 @@ def dev(dev_name):
     if services[Core2WebappKeys.TYPE] == Core2WebappMessages.DEV_SERVICES:
         for service in services[Core2WebappKeys.SERVICES_LIST]:
             print('httpserver', service)
-    return render_template('dev.html', title=dev_name, dev_name=dev_name, services=services[Core2WebappKeys.SERVICES_LIST])
+    return render_template('dev.html', title=dev_name, dev_name=dev_name, devices=get_devices(), services=services[Core2WebappKeys.SERVICES_LIST])
 
 
 @app.route('/dev/<dev_name>/<service>')
