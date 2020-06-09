@@ -23,7 +23,7 @@ class User:
             "privileges": self.privileges
         })
 
-    def check_privilege(priv):
+    def check_privilege(self, priv):
         if priv in self.privileges:
             return True
         return False
