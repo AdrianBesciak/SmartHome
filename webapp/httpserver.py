@@ -74,7 +74,6 @@ def login():
 
 
 @app.route('/admin')
-#@login_required
 def admin():
     user = current_user
     if not user or not user.is_admin():
