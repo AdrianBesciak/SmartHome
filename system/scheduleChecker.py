@@ -3,6 +3,7 @@ from datetime import datetime
 from operator import mod, eq
 from math import floor
 
+
 def check_timestamp():
     stamp = open('timestamp.txt', 'r')
     str = stamp.read()

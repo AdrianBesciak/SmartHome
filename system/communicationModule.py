@@ -44,7 +44,7 @@ def main(pipe):
                         if post['dev_type'] == Core2CommunicationModuleValues.SERIAL:
                             post['dev_type'] = 'serial'
                         devices_db.send(post)
-                    print('\t\tZarejestrowano ', dev.get_name())
+                    print('\t\tRegistered ', dev.get_name())
 
             elif rec[Core2CommunicationModuleKeys.COMMAND] == Core2CommunicationModuleValues.SEND2DEV:
                 pipe.send(devices_dict[rec[Core2CommunicationModuleKeys.DEV_NAME]].talk(rec[Core2CommunicationModuleKeys.MESSAGE]))

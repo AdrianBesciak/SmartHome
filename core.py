@@ -13,14 +13,13 @@ def main():
     p_conn, c_conn = mp.Pipe()
     p = mp.Process(target=cm.main, args=(c_conn,))
     p.start()
-    print(p_conn.recv())
+    p_conn.recv()
     login = ls.LoginService()
     #login.welcome()
     scheduler = ss.ScheduleService(p_conn)
     schedule_checker = scheduleChecker.ScheduleChecker()
     last_minute = datetime.datetime.now().minute
 
-    print('Tworze serwer webowy')
     web_p_conn, web_c_conn = mp.Pipe()
     web_p = mp.Process(target=httpserver.main, args=(web_c_conn, ))
     web_p.start()
@@ -106,13 +105,10 @@ def main():
             print("timed out")
         '''
         web_received = web_p_conn.recv()
-        print('core - cos dostalem')
         if web_received:
             if web_received[Webapp2CoreKeys.COMMAND] == Webapp2CoreMessages.GET_DEVICES:
-                print('core - to tak komenda')
                 p_conn.send({Core2CommunicationModuleKeys.COMMAND: Core2CommunicationModuleValues.DEVS})
                 devices = p_conn.recv()
-                print("Zarejestrowano ", len(devices), 'urzadzen')
                 web_p_conn.send({Core2WebappKeys.TYPE: Core2WebappMessages.DEVICES,
                                  Core2WebappKeys.DEVICES_LIST: devices})
 

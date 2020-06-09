@@ -9,12 +9,12 @@ class User(UserMixin):
         self.username = username
         self.email = email
         self.__password = password
-        self.privileges=privileges
+        self.privileges = privileges
         self.is_authenticated = True
-        #self.is_active = False
-        #self.is_anonymous = True
+        # self.is_active = False
+        # self.is_anonymous = True
         # self.__send_to_db__()
-        self.id=None
+        self.id = None
 
     def send_to_db(self):
         self.db.send({
@@ -57,7 +57,7 @@ class User(UserMixin):
     def get_by_email(email):
         user_dict = User.db.get('email', email)
         if user_dict is not None:
-            user = User(user_dict['username'], user_dict['email'], user_dict['password'],user_dict['privileges'] )
+            user = User(user_dict['username'], user_dict['email'], user_dict['password'], user_dict['privileges'])
             user.auth(True)
             return user
         else:

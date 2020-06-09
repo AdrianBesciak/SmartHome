@@ -15,7 +15,7 @@ class SerialDevice(device.Device):
             timeout=1
         )
         if not self.device.isOpen():
-            print('Nie udalo sie otworzyc portu szeregowego')
+            print("Couldn't open serial port!")
         else:
             time.sleep(1)
         self.services = self.get_services_list()

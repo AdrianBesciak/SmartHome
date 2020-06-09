@@ -8,10 +8,11 @@ from system.interprocess_communication import Webapp2CoreMessages, Webapp2CoreKe
 
 from system.user import User
 
+
 def get_devices():
     system_core_pipe.send({Webapp2CoreKeys.COMMAND: Webapp2CoreMessages.GET_DEVICES})
     devices = system_core_pipe.recv()
-    while devices.get(Core2WebappKeys.TYPE) == Core2WebappMessages.DEV_RESPONSE:  # TUTAJ BUG, BO NIE UZYWAM GETA
+    while devices.get(Core2WebappKeys.TYPE) == Core2WebappMessages.DEV_RESPONSE:
         flash(devices[Core2WebappKeys.RESPONSE], 'info')
         devices = system_core_pipe()
     return devices[Core2WebappKeys.DEVICES_LIST]
@@ -26,11 +27,13 @@ def home():
 
 @app.route('/dev/<dev_name>')
 def dev(dev_name):
-    system_core_pipe.send({Webapp2CoreKeys.COMMAND: Webapp2CoreMessages.DEV_SERVICES, Webapp2CoreKeys.DEV_NAME: dev_name})
+    system_core_pipe.send(
+        {Webapp2CoreKeys.COMMAND: Webapp2CoreMessages.DEV_SERVICES, Webapp2CoreKeys.DEV_NAME: dev_name})
     services = system_core_pipe.recv()
     while services[Core2WebappKeys.TYPE] != Core2WebappMessages.DEV_SERVICES:
         services = system_core_pipe.recv()
-    return render_template('dev.html', title=dev_name, dev_name=dev_name, devices=get_devices(), services=services[Core2WebappKeys.SERVICES_LIST])
+    return render_template('dev.html', title=dev_name, dev_name=dev_name, devices=get_devices(),
+                           services=services[Core2WebappKeys.SERVICES_LIST])
 
 
 @app.route('/dev/<dev_name>/<service>')
@@ -39,7 +42,8 @@ def run_service(dev_name, service):
     if not user.is_authenticated or not user.check_privilege(dev_name):
         flash('You are not allowed to use ' + dev_name + ' device', 'info')
         return redirect(url_for('home'))
-    system_core_pipe.send({Webapp2CoreKeys.COMMAND: Webapp2CoreMessages.RUN_SERVICE, Webapp2CoreKeys.DEV_NAME: dev_name, Webapp2CoreKeys.SERVICE: service})
+    system_core_pipe.send({Webapp2CoreKeys.COMMAND: Webapp2CoreMessages.RUN_SERVICE, Webapp2CoreKeys.DEV_NAME: dev_name,
+                           Webapp2CoreKeys.SERVICE: service})
     time.sleep(1)
     received = system_core_pipe.recv()
     if received[Core2WebappKeys.TYPE] == Core2WebappMessages.DEV_RESPONSE:
@@ -107,8 +111,8 @@ def register_new_device():
             system_core_pipe.send({Webapp2CoreKeys.COMMAND: Webapp2CoreMessages.REGISTER_DEVICE,
                                    Webapp2CoreKeys.DEV_NAME: form.port.data,
                                    })
-            received = system_core_pipe.recv();
-            flash("Registered device: "+received[Core2WebappMessages.RESPONSE], 'info')
+            received = system_core_pipe.recv()
+            flash("Registered device: " + received[Core2WebappMessages.RESPONSE], 'info')
     return render_template('add_device.html', title="Added", form=form)
 
 
@@ -139,9 +143,7 @@ def add_new_schedule():
 def main(pipe):
     global system_core_pipe
     system_core_pipe = pipe
-#    pipe.send('Proces zyje')
     app.run(debug=True, host='0.0.0.0')
-#    pipe.send('Strona dziala')
     while True:
         if pipe.poll(1):
             rec = pipe.recv()
