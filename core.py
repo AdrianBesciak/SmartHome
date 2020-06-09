@@ -130,6 +130,13 @@ def main():
                 web_p_conn.send({Core2WebappKeys.TYPE: Core2WebappMessages.DEV_RESPONSE,
                                  Core2WebappMessages.RESPONSE: p_conn.recv()})
 
+            elif web_received[Webapp2CoreKeys.COMMAND] == Webapp2CoreMessages.REGISTER_DEVICE:
+                p_conn.send({Core2CommunicationModuleKeys.COMMAND: Core2CommunicationModuleValues.REGISTER_DEVICE,
+                            Core2CommunicationModuleKeys.DEV_TYPE: Core2CommunicationModuleValues.SERIAL,
+                             Core2CommunicationModuleKeys.DEV_PORT: web_received[Webapp2CoreKeys.DEV_NAME]})
+                web_p_conn.send({Core2WebappKeys.TYPE: Core2WebappMessages.DEV_RESPONSE,
+                                 Core2WebappMessages.RESPONSE: p_conn.recv()})
+
         if datetime.datetime.now().minute != last_minute:
             jobs = schedule_checker.checkJobs()
             for job in jobs:

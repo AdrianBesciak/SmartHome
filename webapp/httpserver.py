@@ -90,6 +90,16 @@ def admin():
 @app.route('/admin/register_device', methods=['GET', 'POST'])
 def register_new_device():
     form = NewDeviceForm()
+    if form.validate_on_submit():
+        if form.mode.data != 'serial':
+            flash("Sorry, we only support serial devices.")
+        else:
+            system_core_pipe.send({Webapp2CoreKeys.COMMAND: Webapp2CoreMessages.REGISTER_DEVICE,
+                                   Webapp2CoreKeys.DEV_NAME: form.port.data,
+                                   })
+            received = system_core_pipe.recv();
+            flash("Registered device: "+received[Core2WebappMessages.RESPONSE], 'info')
+    return render_template('add_device.html', title="Added", form=form)
 
 
 

@@ -5,13 +5,15 @@ class Webapp2CoreMessages(Enum):
     GET_DEVICES = 1,
     DEV_SERVICES = 2,
     RUN_SERVICE = 3,
-    LOGIN = 4
+    LOGIN = 4,
+    REGISTER_DEVICE = 5
 
 
 class Webapp2CoreKeys(Enum):
     COMMAND = 1,
     DEV_NAME = 2,
-    SERVICE = 3
+    SERVICE = 3,
+    DEVICE_TYPE = 4
 
 
 class Core2WebappKeys(Enum):
