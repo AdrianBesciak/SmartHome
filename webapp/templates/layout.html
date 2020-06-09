@@ -29,27 +29,34 @@
                 </li>
             {% endif %}
 
-          {% if title == "Login" %}
-              <li class="nav-item active">
-                <a class="nav-link" href=" {{ url_for('login') }} ">Login</a>
-              </li>
-           {% else %}
-                <li class="nav-item ">
+          {% if current_user.is_authenticated %}
+            <h4 style="color: white; margin-right: 10px; margin-top: 6px">Logged as {{ current_user.username }}</h4>
+            <a class="nav-link" href="{{ url_for('logout') }}" >LogOut</a>
+
+          {% else %}
+
+              {% if title == "Login" %}
+                  <li class="nav-item active">
                     <a class="nav-link" href=" {{ url_for('login') }} ">Login</a>
-                </li>
-            {% endif %}
+                  </li>
+               {% else %}
+                    <li class="nav-item ">
+                        <a class="nav-link" href=" {{ url_for('login') }} ">Login</a>
+                    </li>
+                {% endif %}
 
-          {% if title == "Register" %}
-              <li class="nav-item active">
-                <a class="nav-link" href="{{ url_for('register') }}" tabindex="-1">Register</a>
-              </li>
-           {% else %}
 
-                <li class="nav-item">
+              {% if title == "Register" %}
+                  <li class="nav-item active">
                     <a class="nav-link" href="{{ url_for('register') }}" tabindex="-1">Register</a>
-                </li>
-            {% endif %}
+                  </li>
+               {% else %}
 
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('register') }}" tabindex="-1">Register</a>
+                    </li>
+                {% endif %}
+            {% endif %}
         </ul>
       </div>
     </nav>

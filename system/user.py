@@ -10,7 +10,7 @@ class User(UserMixin):
         self.email = email
         self.__password = password
         self.privileges=privileges
-        self.is_authenticated = False
+        self.is_authenticated = True
         #self.is_active = False
         #self.is_anonymous = True
         # self.__send_to_db__()

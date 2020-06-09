@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from webapp.forms import RegistrationForm, LoginForm
 from flask_bcrypt import Bcrypt
-from flask_login import LoginManager, login_user, login_required, current_user
+from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 from webapp import *
 import time
 from system.interprocess_communication import Webapp2CoreMessages, Webapp2CoreKeys, Core2WebappKeys, Core2WebappMessages
@@ -20,6 +20,7 @@ def get_devices():
 @app.route('/home')
 def home():
     system_core_pipe.send({Webapp2CoreKeys.COMMAND: Webapp2CoreMessages.GET_DEVICES})
+    print('HOME: ', current_user, 'zalogowany? ', current_user.is_authenticated)
     return render_template('index.html', title='Home', devices=get_devices())
 
 
@@ -72,6 +73,11 @@ def login():
 
     return render_template('login.html', title='Login', form=form)
 
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('home'))
 
 @app.route('/admin')
 def admin():
