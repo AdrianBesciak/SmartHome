@@ -1,5 +1,6 @@
 import multiprocessing as mp
 import datetime
+import time
 from system import scheduleChecker
 from system import communicationModule as cm
 from system import schedueService as ss
@@ -21,8 +22,10 @@ def main():
     web_p = mp.Process(target=httpserver.main, args=(web_c_conn, ))
     web_p.start()
 
+    first_loop = True
     while True:
-        if web_p_conn.poll():
+        if first_loop or web_p_conn.poll():
+            first_loop = False
             web_received = web_p_conn.recv()
             if web_received[Webapp2CoreKeys.COMMAND] == Webapp2CoreMessages.GET_DEVICES:
                 p_conn.send({Core2CommunicationModuleKeys.COMMAND: Core2CommunicationModuleValues.DEVS})
