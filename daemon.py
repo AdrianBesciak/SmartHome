@@ -1,3 +1,4 @@
+#!/usr/bin/python3.8
 from system import scheduleChecker
 from system.interprocess_communication import Core2CommunicationModuleKeys, Core2CommunicationModuleValues
 
