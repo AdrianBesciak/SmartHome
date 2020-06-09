@@ -30,6 +30,11 @@
             {% endif %}
 
           {% if current_user.is_authenticated %}
+
+            {% if current_user.is_admin() %}
+                <a class="nav-link" href="{{ url_for('admin') }}">Admin's cockpit</a>
+            {% endif %}
+
             <h4 style="color: white; margin-right: 10px; margin-top: 6px">Logged as {{ current_user.username }}</h4>
             <a class="nav-link" href="{{ url_for('logout') }}" >LogOut</a>
 
