@@ -89,12 +89,13 @@ class ScheduleService:
 
     def get(self):
         name = input("Which job do you want? All jobs are available with getAll")
-        job = self.__task_base.getAll("name", name)
+        job = self.__task_base.get("name", name)
         if job is None:
             print("This job doesn't exist.")
         else:
             print("Name: " + job['name'] + ", device: " + job['device'] + ", command: " + job['command'])
             print("Executed" + job['modifier'] + job['number'] + job['unit'] + 's\r\n')
+
 
 '''
 Example task for db:
