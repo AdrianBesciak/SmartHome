@@ -1,10 +1,13 @@
 import multiprocessing as mp
+import datetime
+from system import scheduleChecker
 from system import communicationModule as cm
 from system import loginService as ls
 from system import schedueService as ss
 from webapp import httpserver
 from system.interprocess_communication import Webapp2CoreKeys, Webapp2CoreMessages, Core2WebappMessages, Core2WebappKeys
 from system.interprocess_communication import Core2CommunicationModuleKeys, Core2CommunicationModuleValues
+
 
 def main():
     p_conn, c_conn = mp.Pipe()
@@ -14,6 +17,8 @@ def main():
     login = ls.LoginService()
     #login.welcome()
     scheduler = ss.ScheduleService(p_conn)
+    schedule_checker = scheduleChecker.ScheduleChecker()
+    last_minute = datetime.datetime.now().minute
 
     print('Tworze serwer webowy')
     web_p_conn, web_c_conn = mp.Pipe()
@@ -125,6 +130,15 @@ def main():
                 web_p_conn.send({Core2WebappKeys.TYPE: Core2WebappMessages.DEV_RESPONSE,
                                  Core2WebappMessages.RESPONSE: p_conn.recv()})
 
+        if datetime.datetime.now().minute != last_minute:
+            jobs = schedule_checker.checkJobs()
+            for job in jobs:
+                #devices_dict[job['dev']].talk(job['com'])
+                p_conn.send({Core2CommunicationModuleKeys.COMMAND: Core2CommunicationModuleValues.SEND2DEV,
+                             Core2CommunicationModuleKeys.DEV_NAME: job['dev'],
+                             Core2CommunicationModuleKeys.MESSAGE: job['com']})
+            schedule_checker.set_timestamp()
+            last_minute = datetime.datetime.now().minute
 
     p.kill()
     exit()
