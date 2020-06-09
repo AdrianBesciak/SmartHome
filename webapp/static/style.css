@@ -42,3 +42,8 @@ body {
   float: left;
   min-height: 700px;
 }
+
+.my_alert {
+  float: right;
+  width: auto;
+}
