@@ -59,8 +59,8 @@ def register():
         user.send_to_db()
         flash(f'Account created for {form.username.data}!', 'success')
         return redirect(url_for('login'))
-    else:
-        flash(f'Account not created - system failure', 'danger')
+    elif form.email.data and form.username.data and form.password.data and form.confirm_password.data:
+        flash(f'Account not created - user already exist', 'danger')
     return render_template('register.html', title='Register', form=form)
 
 

@@ -44,6 +44,6 @@ body {
 }
 
 .my_alert {
-  float: right;
+  float: left;
   width: auto;
 }
